@@ -1,0 +1,243 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:AvaAIChat.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaAIChat.Controls.CustomChatControl"
+             x:DataType="vm:ChatViewModel"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:vm="clr-namespace:AvaAIChat.ViewModels">
+
+    <UserControl.Styles>
+        <Style Selector="Border.message-container">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="MaxWidth" Value="600" />
+        </Style>
+
+        <Style Selector="Border.user-message">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style Selector="Border.user-message-bg">
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor}" />
+            <Setter Property="Opacity" Value="0.2" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+
+        <Style Selector="Border.ai-message">
+            <Setter Property="Background" Value="{DynamicResource SukiCardBackground}" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+
+        <Style Selector="TextBlock.message-text, SelectableTextBlock.message-text">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        
+        <!-- 可选择文本的光标样式 -->
+        <Style Selector="SelectableTextBlock.message-text">
+            <Setter Property="Cursor" Value="IBeam" />
+        </Style>
+
+        <Style Selector="Border.avatar">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+
+        <!-- 发送/停止按钮样式 -->
+        <Style Selector="Button.send-stop-btn">
+            <!-- 鼠标悬停和点击的动画效果 -->
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.send-stop-btn:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.1)" />
+        </Style>
+        <Style Selector="Button.send-stop-btn:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.95)" />
+        </Style>
+        
+        <!-- 发送按钮背景层 -->
+        <Style Selector="Border.send-btn-bg">
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor}" />
+            <Setter Property="Opacity" Value="0.2" />
+            <Setter Property="CornerRadius" Value="22" />
+        </Style>
+    </UserControl.Styles>
+
+    <DockPanel LastChildFill="True">
+        <Border DockPanel.Dock="Bottom"
+                Background="{DynamicResource SukiBackground}"
+                Padding="15"
+                BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                BorderThickness="0,2,0,0">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBox Grid.Column="0"
+                         x:Name="InputTextBox"
+                         Text="{Binding InputText}"
+                         Watermark="输入消息..."
+                         IsEnabled="{Binding !IsSending}"
+                         VerticalAlignment="Center"
+                         Background="{DynamicResource SukiCardBackground}"
+                         BorderBrush="{DynamicResource SukiLightBorderBrush}"
+                         Foreground="{DynamicResource SukiText}"
+                         Padding="12,8"
+                         CornerRadius="6">
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding SendMessageCommand}" />
+                    </TextBox.KeyBindings>
+                </TextBox>
+
+                <!-- 发送/停止按钮 -->
+                <Grid Grid.Column="1" Margin="10,0,0,0">
+                    <!-- 停止按钮 -->
+                    <Button Classes="send-stop-btn"
+                            Command="{Binding StopGenerationCommand}"
+                            IsVisible="{Binding IsSending}"
+                            Background="#EF4444"
+                            Foreground="White"
+                            Width="44"
+                            Height="44"
+                            CornerRadius="22"
+                            Padding="0"
+                            ToolTip.Tip="停止生成">
+                        <i:Icon Value="mdi-stop" FontSize="24" />
+                    </Button>
+
+                    <!-- 发送按钮 -->
+                    <Grid Width="44" Height="44" IsVisible="{Binding !IsSending}">
+                        <!-- 淡色背景层 -->
+                        <Border Classes="send-btn-bg" />
+                        
+                        <!-- 按钮层 -->
+                        <Button Classes="send-stop-btn"
+                                Command="{Binding SendMessageCommand}"
+                                Background="Transparent"
+                                Foreground="{DynamicResource SukiPrimaryColor}"
+                                Width="44"
+                                Height="44"
+                                CornerRadius="22"
+                                Padding="0"
+                                ToolTip.Tip="发送消息">
+                            <i:Icon Value="mdi-send" FontSize="24" />
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <ScrollViewer x:Name="MessageScrollViewer"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Messages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:ChatMessageModel">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- AI头像（左侧） -->
+                            <Border Grid.Column="0"
+                                    Classes="avatar"
+                                    Margin="0,0,10,0"
+                                    IsVisible="{Binding !IsUser}">
+                                <Image Source="avares://AvaAIChat/Assets/robot.jpg"
+                                       Stretch="UniformToFill" />
+                            </Border>
+
+                            <!-- 消息内容 -->
+                            <Grid Grid.Column="1"
+                                  HorizontalAlignment="{Binding IsUser, Converter={StaticResource BoolToAlignmentConverter}}"
+                                  MaxWidth="600"
+                                  Margin="10">
+                                
+                                <!-- 背景层（用户消息时显示半透明主题色） -->
+                                <Border Classes="user-message-bg"
+                                        IsVisible="{Binding IsUser}" />
+                                
+                                <!-- 内容层 -->
+                                <Border Classes.message-container="True"
+                                        Classes.user-message="{Binding IsUser}"
+                                        Classes.ai-message="{Binding !IsUser}">
+                                    <StackPanel>
+                                    <!-- 思考中指示器 -->
+                                    <StackPanel Orientation="Horizontal"
+                                                IsVisible="{Binding IsThinking}"
+                                                Margin="0,0,0,8">
+                                        <TextBlock Text="💭 AI正在思考中..."
+                                                   Classes="message-text"
+                                                   FontStyle="Italic" />
+                                    </StackPanel>
+
+                                    <!-- 推理过程（可折叠） -->
+                                    <Expander IsVisible="{Binding HasReasoning}"
+                                              IsExpanded="{Binding IsReasoningExpanded}"
+                                              Margin="0,0,0,8"
+                                              Background="{DynamicResource SukiBackground}"
+                                              CornerRadius="4">
+                                        <Expander.Header>
+                                            <TextBlock Text="🧠 推理过程"
+                                                       Foreground="{DynamicResource SukiLowText}"
+                                                       FontSize="12"
+                                                       FontWeight="Bold" />
+                                        </Expander.Header>
+                                        <ItemsControl ItemsSource="{Binding ReasoningSteps}"
+                                                      Margin="10">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,4">
+                                                        <TextBlock Text="▸"
+                                                                   Foreground="{DynamicResource SukiPrimaryColor}"
+                                                                   Margin="0,0,8,0" />
+                                                        <SelectableTextBlock Text="{Binding}"
+                                                                             TextWrapping="Wrap"
+                                                                             Foreground="{DynamicResource SukiLowText}"
+                                                                             FontSize="12" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Expander>
+
+                                    <!-- 正文内容 -->
+                                    <SelectableTextBlock Text="{Binding Content}"
+                                                         Classes="message-text"
+                                                         IsVisible="{Binding !IsThinking}" />
+
+                                    <!-- 时间戳 -->
+                                    <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
+                                               Foreground="{DynamicResource SukiLowText}"
+                                               FontSize="10"
+                                               Margin="0,4,0,0"
+                                               HorizontalAlignment="Right" />
+                                </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- 用户头像（右侧） -->
+                            <Border Grid.Column="2"
+                                    Classes="avatar"
+                                    Margin="10,0,0,0"
+                                    IsVisible="{Binding IsUser}">
+                                <Image Source=" avares://AvaAIChat/Assets/TestPng.png"
+                                       Stretch="UniformToFill" />
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

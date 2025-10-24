@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="AvaAIChat/App.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+        <entry key="AvaAIChat/Controls/CustomChatControl.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+        <entry key="AvaAIChat/Views/AboutPage.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+        <entry key="AvaAIChat/Views/ChatPage.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+        <entry key="AvaAIChat/Views/CustomColorPickerControl.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+        <entry key="AvaAIChat/Views/HomePage.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+        <entry key="AvaAIChat/Views/MainWindow.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+        <entry key="AvaAIChat/Views/SettingsPage.axaml" value="AvaAIChat/AvaAIChat.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
