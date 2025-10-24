@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using AvaloniaXmlTranslator;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MarkdownAIRender.Controls.MarkdownRender;
 using Microsoft.Extensions.Logging;
 
 namespace AvaAIChat.ViewModels;
@@ -32,14 +33,6 @@ public partial class ChatViewModel : ViewModelBase
     {
         _openRouterService = openRouterService;
         _logger = logger;
-
-        // 添加欢迎消息
-        Messages.Add(new ChatMessageModel
-        {
-            Content = "你好！我是AI助手，有什么可以帮助你的吗？",
-            IsUser = false,
-            Timestamp = DateTime.Now
-        });
         
         var language = I18nManager.Instance.GetLanguages();
         if (language is not null)
@@ -47,7 +40,21 @@ public partial class ChatViewModel : ViewModelBase
             var culture = new CultureInfo(language[1].CultureName);
             I18nManager.Instance.Culture = culture;
         }
+        
+        // 立即添加欢迎消息（避免页面空白）
+        if (Messages.Count == 0)
+        {
+            Messages.Add(new ChatMessageModel
+            {
+                Content = "你好！我是AI助手，有什么可以帮助你的吗？",
+                IsUser = false,
+                Timestamp = DateTime.Now
+            });
+        }
+        
+        MarkdownClass.ChangeTheme(MarkdownClass.Themes[2].Key);
     }
+    
 
     [RelayCommand]
     private async Task SendMessageAsync()
@@ -159,22 +166,46 @@ public partial class ChatViewModel : ViewModelBase
 
             // 调用流式 API
             bool isFirstChunk = true;
-
-            await foreach (var chunk in _openRouterService.SendChatStreamAsync(messages, cancellationToken))
+            
+            // 开始流式更新
+            await Dispatcher.UIThread.InvokeAsync(aiMessage.StartStreaming);
+            
+            // 使用定时器节流更新 UI（每 100ms 刷新一次）
+            var updateTimer = new System.Timers.Timer(100);
+            updateTimer.Elapsed += (s, e) =>
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                Dispatcher.UIThread.Post(() => aiMessage.FlushStreamBuffer());
+            };
+            updateTimer.Start();
+
+            try
+            {
+                await foreach (var chunk in _openRouterService.SendChatStreamAsync(messages, cancellationToken))
                 {
                     // 收到第一个响应块时，关闭思考状态
                     if (isFirstChunk)
                     {
-                        aiMessage.IsThinking = false;
-                        aiMessage.Content = string.Empty;
+                        await Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            aiMessage.IsThinking = false;
+                            aiMessage.Content = string.Empty;
+                        });
                         isFirstChunk = false;
                     }
 
-                    // 直接追加内容
-                    aiMessage.Content += chunk;
-                });
+                    // 追加到缓冲区（不立即触发 UI 更新）
+                    aiMessage.AppendStreamContent(chunk);
+                }
+            }
+            finally
+            {
+                // 停止定时器
+                updateTimer.Stop();
+                updateTimer.Dispose();
+                
+                // 完成流式更新，最后刷新一次
+                await Dispatcher.UIThread.InvokeAsync(aiMessage.FinishStreaming);
+                MarkdownClass.ChangeTheme(MarkdownClass.Themes[2].Key);
             }
         }
         catch (OperationCanceledException)

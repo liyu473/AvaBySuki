@@ -182,8 +182,20 @@
                                     </StackPanel>
 
                                     <!-- 正文内容 -->
-                                    <md:MarkdownRender Value="{Binding Content}"
-                                                       IsVisible="{Binding !IsThinking}" />
+                                    <!-- 流式期间显示纯文本（避免频繁渲染 Markdown） -->
+                                    <SelectableTextBlock Text="{Binding Content}"
+                                                         Classes="message-text"
+                                                         IsVisible="{Binding IsStreaming}" />
+                                    
+                                    <!-- 流式完成后显示 Markdown 渲染 -->
+                                    <md:MarkdownRender Value="{Binding Content}">
+                                        <md:MarkdownRender.IsVisible>
+                                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                <Binding Path="!IsThinking" />
+                                                <Binding Path="!IsStreaming" />
+                                            </MultiBinding>
+                                        </md:MarkdownRender.IsVisible>
+                                    </md:MarkdownRender>
 
                                     <!-- 时间戳 -->
                                     <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
