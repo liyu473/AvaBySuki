@@ -1,36 +1,38 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AvaAIChat.Models;
 using AvaAIChat.Services;
 using Avalonia.Threading;
+using AvaloniaXmlTranslator;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 
 namespace AvaAIChat.ViewModels;
 
 public partial class ChatViewModel : ViewModelBase
 {
     private readonly IOpenRouterService _openRouterService;
-    
-    [ObservableProperty]
-    private ObservableCollection<ChatMessageModel> _messages = new();
+    private readonly ILogger<ChatViewModel> _logger;
 
-    [ObservableProperty]
-    private string _inputText = string.Empty;
+    [ObservableProperty] private ObservableCollection<ChatMessageModel> _messages = new();
 
-    [ObservableProperty]
-    private bool _isSending = false;
+    [ObservableProperty] private string _inputText = string.Empty;
+
+    [ObservableProperty] private bool _isSending = false;
 
     private CancellationTokenSource? _cancellationTokenSource;
 
-    public ChatViewModel(IOpenRouterService openRouterService)
+    public ChatViewModel(IOpenRouterService openRouterService, ILogger<ChatViewModel> logger)
     {
         _openRouterService = openRouterService;
-        
+        _logger = logger;
+
         // 添加欢迎消息
         Messages.Add(new ChatMessageModel
         {
@@ -38,6 +40,13 @@ public partial class ChatViewModel : ViewModelBase
             IsUser = false,
             Timestamp = DateTime.Now
         });
+        
+        var language = I18nManager.Instance.GetLanguages();
+        if (language is not null)
+        {
+            var culture = new CultureInfo(language[1].CultureName);
+            I18nManager.Instance.Culture = culture;
+        }
     }
 
     [RelayCommand]
@@ -48,7 +57,7 @@ public partial class ChatViewModel : ViewModelBase
 
         var userMessage = InputText;
         InputText = string.Empty;
-        
+
         var userMsg = new ChatMessageModel
         {
             Content = userMessage,
@@ -56,7 +65,7 @@ public partial class ChatViewModel : ViewModelBase
             Timestamp = DateTime.Now
         };
         Messages.Add(userMsg);
-        
+
         await GenerateAIResponseAsync(userMessage);
     }
 
@@ -115,19 +124,20 @@ public partial class ChatViewModel : ViewModelBase
     /// <summary>
     /// 调用 OpenRouter API 获取响应（流式）
     /// </summary>
-    private async Task SimulateAIResponseAsync(ChatMessageModel aiMessage, string userInput, CancellationToken cancellationToken)
+    private async Task SimulateAIResponseAsync(ChatMessageModel aiMessage, string userInput,
+        CancellationToken cancellationToken)
     {
         try
         {
             // 构建对话历史
             var messages = new List<OpenRouterMessage>();
-            
+
             // 添加历史消息（最多取最近10条）
             var recentMessages = Messages
                 .Where(m => !m.IsThinking && !string.IsNullOrEmpty(m.Content))
                 .TakeLast(10)
                 .ToList();
-            
+
             foreach (var msg in recentMessages)
             {
                 messages.Add(new OpenRouterMessage
@@ -136,7 +146,7 @@ public partial class ChatViewModel : ViewModelBase
                     Content = msg.Content
                 });
             }
-            
+
             // 如果历史中没有当前用户消息，添加它
             if (!messages.Any() || messages.Last().Content != userInput)
             {
@@ -149,7 +159,7 @@ public partial class ChatViewModel : ViewModelBase
 
             // 调用流式 API
             bool isFirstChunk = true;
-            
+
             await foreach (var chunk in _openRouterService.SendChatStreamAsync(messages, cancellationToken))
             {
                 await Dispatcher.UIThread.InvokeAsync(() =>
@@ -161,7 +171,8 @@ public partial class ChatViewModel : ViewModelBase
                         aiMessage.Content = string.Empty;
                         isFirstChunk = false;
                     }
-                    
+
+                    // 直接追加内容
                     aiMessage.Content += chunk;
                 });
             }
@@ -175,7 +186,8 @@ public partial class ChatViewModel : ViewModelBase
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 aiMessage.IsThinking = false;
-                aiMessage.Content = $"API 调用失败: {ex.Message}\n\n请检查:\n1. API Key 是否正确\n2. 网络连接是否正常\n3. OpenRouter 配额是否充足";
+                aiMessage.Content =
+                    $"API 调用失败: {ex.Message}\n\n请检查:\n1. API Key 是否正确\n2. 网络连接是否正常\n3. OpenRouter 配额是否充足";
             });
         }
     }

@@ -14,5 +14,6 @@
     <Application.Styles>
         <sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue"  />
         <templates:PixiPerfectColorPickerTheme />
+        <StyleInclude Source="avares://MarkdownAIRender/Index.axaml"/>
     </Application.Styles>
 </Application>

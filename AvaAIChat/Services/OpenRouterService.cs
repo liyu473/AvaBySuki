@@ -30,7 +30,7 @@ public class OpenRouterService : IOpenRouterService
         _config = config.Value;
         this._logger = _logger;
 
-        // 使用 OpenAI SDK 初始化客户端，指向 OpenRouter
+        // 使用 OpenAI SDK 初始化客户端
         var options = new OpenAIClientOptions
         {
             Endpoint = new Uri(_config.BaseUrl)
@@ -39,7 +39,7 @@ public class OpenRouterService : IOpenRouterService
         var credential = new ApiKeyCredential(_config.ApiKey);
         _client = new OpenAIClient(credential, options);
         
-        _logger.LogInformation("OpenRouter 服务已初始化 (使用 OpenAI SDK)，BaseUrl: {BaseUrl}, Model: {Model}", _config.BaseUrl, _config.Model);
+        _logger.LogInformation("服务已初始化，BaseUrl: {BaseUrl}, Model: {Model}", _config.BaseUrl, _config.Model);
     }
 
     /// <summary>
@@ -68,7 +68,8 @@ public class OpenRouterService : IOpenRouterService
             var chatRequest = new ChatCompletionOptions
             {
                 MaxOutputTokenCount = _config.MaxTokens,
-                Temperature = (float)_config.Temperature
+                Temperature = (float)_config.Temperature,
+                TopP = (float)_config.TopP
             };
 
             var chatClient = _client.GetChatClient(_config.Model);
@@ -99,7 +100,7 @@ public class OpenRouterService : IOpenRouterService
         List<OpenRouterMessage> messages,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        _logger.LogDebug("发送流式 OpenRouter 请求，模型: {Model}", _config.Model);
+        _logger.LogInformation("发送流式 OpenRouter 请求，模型: {Model}", _config.Model);
 
         // 转换消息格式
         var chatMessages = new List<ChatMessage>();
@@ -118,12 +119,13 @@ public class OpenRouterService : IOpenRouterService
         var chatRequest = new ChatCompletionOptions
         {
             MaxOutputTokenCount = _config.MaxTokens,
-            Temperature = (float)_config.Temperature
+            Temperature = (float)_config.Temperature,
+            TopP = (float)_config.TopP
         };
 
         var chatClient = _client.GetChatClient(_config.Model);
         var streamingResponse = chatClient.CompleteChatStreamingAsync(chatMessages, chatRequest, cancellationToken);
-
+        
         await foreach (var update in streamingResponse.WithCancellation(cancellationToken))
         {
             foreach (var contentPart in update.ContentUpdate)
@@ -135,6 +137,6 @@ public class OpenRouterService : IOpenRouterService
             }
         }
 
-        _logger.LogDebug("流式响应完成");
+        _logger.LogInformation("流式响应完成");
     }
 }

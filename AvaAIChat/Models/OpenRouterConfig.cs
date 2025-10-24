@@ -29,4 +29,9 @@ public class OpenRouterConfig
     /// 温度参数 (0-2)
     /// </summary>
     public double Temperature { get; set; } = 0.7;
+    
+    /// <summary>
+    /// Top-p 采样参数 (0-1)，控制生成文本的多样性
+    /// </summary>
+    public double TopP { get; set; } = 0.95;
 }

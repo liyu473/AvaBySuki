@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="clr-namespace:AvaAIChat.Models"
+             xmlns:md="https://github.com/AIDotNet/Markdown.AIRender"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaAIChat.Controls.CustomChatControl"
              x:DataType="vm:ChatViewModel"
@@ -180,41 +181,9 @@
                                                    FontStyle="Italic" />
                                     </StackPanel>
 
-                                    <!-- 推理过程（可折叠） -->
-                                    <Expander IsVisible="{Binding HasReasoning}"
-                                              IsExpanded="{Binding IsReasoningExpanded}"
-                                              Margin="0,0,0,8"
-                                              Background="{DynamicResource SukiBackground}"
-                                              CornerRadius="4">
-                                        <Expander.Header>
-                                            <TextBlock Text="🧠 推理过程"
-                                                       Foreground="{DynamicResource SukiLowText}"
-                                                       FontSize="12"
-                                                       FontWeight="Bold" />
-                                        </Expander.Header>
-                                        <ItemsControl ItemsSource="{Binding ReasoningSteps}"
-                                                      Margin="10">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal"
-                                                                Margin="0,4">
-                                                        <TextBlock Text="▸"
-                                                                   Foreground="{DynamicResource SukiPrimaryColor}"
-                                                                   Margin="0,0,8,0" />
-                                                        <SelectableTextBlock Text="{Binding}"
-                                                                             TextWrapping="Wrap"
-                                                                             Foreground="{DynamicResource SukiLowText}"
-                                                                             FontSize="12" />
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </Expander>
-
                                     <!-- 正文内容 -->
-                                    <SelectableTextBlock Text="{Binding Content}"
-                                                         Classes="message-text"
-                                                         IsVisible="{Binding !IsThinking}" />
+                                    <md:MarkdownRender Value="{Binding Content}"
+                                                       IsVisible="{Binding !IsThinking}" />
 
                                     <!-- 时间戳 -->
                                     <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"

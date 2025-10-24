@@ -26,6 +26,7 @@
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="MarkdownAIRender" Version="0.1.16" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0-rc.2.25502.107" />
         <PackageReference Include="OpenAI" Version="2.5.0" />
         <PackageReference Include="PixiEditor.ColorPicker.AvaloniaUI" Version="1.0.7" />
@@ -54,5 +55,16 @@
         <None Update="appsettings.Development.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Remove="i18n\MarkDown.en-Us.xml" />
+      <Content Include="i18n\MarkDown.en-Us.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="i18n\MarkDown.zh-CN.xml" />
+      <Content Include="i18n\MarkDown.zh-CN.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 </Project>

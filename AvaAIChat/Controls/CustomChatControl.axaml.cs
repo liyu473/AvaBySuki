@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
 using AvaAIChat.ViewModels;
 
@@ -10,6 +11,8 @@ public partial class CustomChatControl : UserControl
 {
     private DispatcherTimer? _scrollTimer;
     private bool _needsScroll;
+    private bool _isUserScrolling = false;
+    private double _lastScrollOffset = 0;
     
     public CustomChatControl()
     {
@@ -18,6 +21,12 @@ public partial class CustomChatControl : UserControl
         // 监听数据上下文变化
         DataContextChanged += OnDataContextChanged;
         
+        // 监听滚动事件，检测用户是否在手动滚动
+        if (MessageScrollViewer != null)
+        {
+            MessageScrollViewer.ScrollChanged += OnScrollChanged;
+        }
+        
         // 初始化滚动定时器（节流）
         _scrollTimer = new DispatcherTimer
         {
@@ -25,13 +34,34 @@ public partial class CustomChatControl : UserControl
         };
         _scrollTimer.Tick += (s, e) =>
         {
-            if (_needsScroll)
+            if (_needsScroll && !_isUserScrolling)
             {
                 PerformScroll();
                 _needsScroll = false;
             }
         };
         _scrollTimer.Start();
+    }
+    
+    private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
+    {
+        if (MessageScrollViewer == null) return;
+        
+        var currentOffset = MessageScrollViewer.Offset.Y;
+        var maxOffset = MessageScrollViewer.Extent.Height - MessageScrollViewer.Viewport.Height;
+        
+        // 如果用户向上滚动（手动滚动），停止自动滚动
+        if (currentOffset < _lastScrollOffset && currentOffset < maxOffset - 50)
+        {
+            _isUserScrolling = true;
+        }
+        // 如果用户滚动到底部附近，恢复自动滚动
+        else if (maxOffset - currentOffset < 50)
+        {
+            _isUserScrolling = false;
+        }
+        
+        _lastScrollOffset = currentOffset;
     }
     
     private void OnDataContextChanged(object? sender, EventArgs e)
