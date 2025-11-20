@@ -155,14 +155,36 @@ public static class ToastExtensions
     /// <param name="duration">显示时长（秒）</param>
     public static void ShowCustomContent(
         this ISukiToastManager toastManager,
+        string title,
         object content,
-        NotificationType type = NotificationType.Information,
-        int duration = 3)
+        int duration,
+        NotificationType type = NotificationType.Information)
     {
         toastManager.CreateToast()
             .OfType(type)
+            .WithTitle(title)
             .WithContent(content)
             .Dismiss().After(TimeSpan.FromSeconds(duration))
+            .Dismiss().ByClicking()
+            .Queue();
+    }
+    
+    /// <summary>
+    /// 显示自定义内容的 Toast
+    /// </summary>
+    /// <param name="toastManager">Toast 管理器</param>
+    /// <param name="content">自定义内容（可以是任何 Control）</param>
+    /// <param name="type">通知类型</param>
+    public static void ShowCustomContent(
+        this ISukiToastManager toastManager,
+        string title,
+        object content,
+        NotificationType type = NotificationType.Information)
+    {
+        toastManager.CreateToast()
+            .OfType(type)
+            .WithTitle(title)
+            .WithContent(content)
             .Dismiss().ByClicking()
             .Queue();
     }
@@ -177,7 +199,7 @@ public static class ToastExtensions
     public static void ShowPersistent(
         this ISukiToastManager toastManager,
         string title,
-        string message,
+        object message,
         NotificationType type = NotificationType.Information)
     {
         toastManager.CreateToast()

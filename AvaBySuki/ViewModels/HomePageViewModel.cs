@@ -1,9 +1,12 @@
+using System.Threading.Tasks;
+using AvaBySuki.Controls;
 using AvaBySuki.Extensions;
+using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
-using System.Threading.Tasks;
 
 namespace AvaBySuki.ViewModels;
 
@@ -12,11 +15,15 @@ public partial class HomePageViewModel : ViewModelBase
     private readonly ILogger<HomePageViewModel> _logger;
     private readonly ISukiDialogManager _dialogManager;
     private readonly ISukiToastManager _toastManager;
+    
+    [ObservableProperty]
+    public partial string Password { get; set; } = string.Empty;
 
     public HomePageViewModel(
         ILogger<HomePageViewModel> logger,
         ISukiDialogManager dialogManager,
-        ISukiToastManager toastManager)
+        ISukiToastManager toastManager
+    )
     {
         _logger = logger;
         _dialogManager = dialogManager;
@@ -54,7 +61,8 @@ public partial class HomePageViewModel : ViewModelBase
     {
         var result = await _dialogManager.ShowConfirmAsync(
             "确认操作",
-            "您确定要执行此操作吗？这个操作可能会影响系统设置。");
+            "您确定要执行此操作吗？这个操作可能会影响系统设置。"
+        );
 
         if (result)
         {
@@ -71,7 +79,8 @@ public partial class HomePageViewModel : ViewModelBase
     {
         var result = await _dialogManager.ShowDeleteConfirmAsync(
             "确认删除",
-            "确定要删除这个项目吗？删除后无法恢复！");
+            "确定要删除这个项目吗？删除后无法恢复！"
+        );
 
         if (result)
         {
@@ -80,6 +89,27 @@ public partial class HomePageViewModel : ViewModelBase
         else
         {
             _toastManager.ShowInfo("已取消", "删除操作已取消");
+        }
+    }
+
+    [RelayCommand]
+    private void ShowCustomContentDialog()
+    {
+        _dialogManager.ShowCustomContent("提示", new TestDialog());
+    }
+
+    [RelayCommand]
+    private async Task ShowCustomContentConfirmDialog()
+    {
+        var result = await _dialogManager.ShowCustomContentConfirmAsync("提示", new TestDialog());
+
+        if (result)
+        {
+            _toastManager.ShowSuccessShort("您点击了确定");
+        }
+        else
+        {
+            _toastManager.ShowInfoShort("您点击了取消");
         }
     }
 
@@ -114,13 +144,13 @@ public partial class HomePageViewModel : ViewModelBase
     [RelayCommand]
     private void ShowOperationSuccess()
     {
-        _toastManager.ShowOperationSuccess("保存");
+        _toastManager.ShowCustomContent("自定义标题", new TestDialog(), NotificationType.Success);
     }
 
     [RelayCommand]
     private void ShowOperationError()
     {
-        _toastManager.ShowOperationError("上传", "文件大小超过限制");
+        _toastManager.ShowPersistent("上传", "文件大小超过限制");
     }
 
     #endregion Toast 测试

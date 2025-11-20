@@ -1,25 +1,36 @@
 <UserControl
+    x:Class="AvaBySuki.Views.HomePage"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:AvaBySuki.ViewModels"
-    xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:i="https://github.com/projektanker/icons.avalonia"
-    mc:Ignorable="d"
-    d:DesignWidth="800"
+    xmlns:icon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+    xmlns:vm="using:AvaBySuki.ViewModels"
     d:DesignHeight="450"
-    x:Class="AvaBySuki.Views.HomePage"
-    x:DataType="vm:HomePageViewModel">
+    d:DesignWidth="800"
+    x:DataType="vm:HomePageViewModel"
+    mc:Ignorable="d">
 
     <ScrollViewer>
-        <StackPanel Margin="20" Spacing="20" MaxWidth="900">
+        <StackPanel
+            MaxWidth="900"
+            Margin="20"
+            Spacing="20">
             <StackPanel Margin="20" Spacing="10">
-                <TextBlock Text="欢迎来到首页" FontSize="24" FontWeight="Bold" />
+                <TextBlock
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="欢迎来到首页" />
 
-                <TextBlock Text="Welcome to Avalonia!" FontSize="16" />
+                <TextBlock FontSize="16" Text="Welcome to Avalonia!" />
 
-                <TextBlock Text="这是使用 MVVM 模式创建的动态页面" FontSize="14" Margin="0,20,0,0" />
+                <TextBlock
+                    Margin="0,20,0,0"
+                    FontSize="14"
+                    Text="这是使用 MVVM 模式创建的动态页面" />
 
                 <Border
                     Margin="0,20,0,0"
@@ -27,18 +38,27 @@
                     Background="{DynamicResource SukiCardBackground}"
                     CornerRadius="10">
                     <StackPanel Spacing="10">
-                        <TextBlock Text="✨ 功能特性" FontSize="18" FontWeight="SemiBold" />
-                        <TextBlock Text="• 基于 Avalonia UI 11.3" FontSize="14" />
-                        <TextBlock Text="• 使用 SukiUI 主题" FontSize="14" />
-                        <TextBlock Text="• MVVM 架构" FontSize="14" />
-                        <TextBlock Text="• Material Design Icons" FontSize="14" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            Text="✨ 功能特性" />
+                        <TextBlock FontSize="14" Text="• 基于 Avalonia UI 11.3" />
+                        <TextBlock FontSize="14" Text="• 使用 SukiUI 主题" />
+                        <TextBlock FontSize="14" Text="• MVVM 架构" />
+                        <TextBlock FontSize="14" Text="• Material Design Icons" />
                     </StackPanel>
                 </Border>
             </StackPanel>
 
             <StackPanel Spacing="5">
-                <TextBlock Text="欢迎使用" FontSize="32" FontWeight="Bold" />
-                <TextBlock Text="测试 Dialog 和 Toast 扩展方法" FontSize="14" Opacity="0.6" />
+                <TextBlock
+                    FontSize="32"
+                    FontWeight="Bold"
+                    Text="欢迎使用" />
+                <TextBlock
+                    FontSize="14"
+                    Opacity="0.6"
+                    Text="测试 Dialog 和 Toast 扩展方法" />
             </StackPanel>
 
             <!--  Dialog 测试  -->
@@ -46,57 +66,72 @@
                 <StackPanel Spacing="20">
                     <DockPanel>
                         <i:Icon
-                            Value="mdi-message-alert"
-                            FontSize="24"
-                            DockPanel.Dock="Left"
                             Margin="0,0,15,0"
-                            Foreground="{DynamicResource SukiPrimaryColor}" />
+                            DockPanel.Dock="Left"
+                            FontSize="24"
+                            Foreground="{DynamicResource SukiPrimaryColor}"
+                            Value="mdi-message-alert" />
                         <StackPanel>
-                            <TextBlock Text="对话框测试" FontSize="18" FontWeight="SemiBold" />
                             <TextBlock
-                                Text="测试各种类型的对话框"
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="对话框测试" />
+                            <TextBlock
+                                Margin="0,5,0,0"
                                 FontSize="13"
                                 Opacity="0.7"
-                                Margin="0,5,0,0" />
+                                Text="测试各种类型的对话框" />
                         </StackPanel>
                     </DockPanel>
 
-                    <UniformGrid Columns="3" Rows="2">
+                    <UniformGrid Columns="3" Rows="3">
                         <Button
-                            Content="成功对话框"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowSuccessDialogCommand}"
-                            Margin="5"
-                            Height="50">
-                        </Button>
+                            Content="成功对话框" />
 
                         <Button
-                            Content="错误对话框"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowErrorDialogCommand}"
-                            Margin="5"
-                            Height="50">
-                        </Button>
+                            Content="错误对话框" />
 
                         <Button
-                            Content="警告对话框"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowWarningDialogCommand}"
-                            Margin="5"
-                            Height="50">
-                        </Button>
+                            Content="警告对话框" />
 
                         <Button
-                            Content="信息对话框"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowInfoDialogCommand}"
-                            Margin="5"
-                            Height="50" />
+                            Content="信息对话框" />
 
                         <Button
-                            Content="确认对话框"
-                            Command="{Binding ShowConfirmDialogCommand}"
+                            Height="50"
                             Margin="5"
-                            Height="50" />
+                            Command="{Binding ShowConfirmDialogCommand}"
+                            Content="确认对话框" />
 
-                        <Button Content="删除确认" Command="{Binding ShowDeleteConfirmCommand}" Margin="5">
-                        </Button>
+                        <Button
+                            Height="50"
+                            Margin="5"
+                            Command="{Binding ShowDeleteConfirmCommand}"
+                            Content="删除确认" />
+
+                        <Button
+                            Height="50"
+                            Margin="5"
+                            Command="{Binding ShowCustomContentDialogCommand}"
+                            Content="自定义内容测试" />
+
+                        <Button
+                            Height="50"
+                            Margin="5"
+                            Command="{Binding ShowCustomContentConfirmDialogCommand}"
+                            Content="自定义内容确认测试" />
                     </UniformGrid>
                 </StackPanel>
             </sukiUi:GlassCard>
@@ -106,61 +141,76 @@
                 <StackPanel Spacing="20">
                     <DockPanel>
                         <i:Icon
-                            Value="mdi-bell-ring"
-                            FontSize="24"
-                            DockPanel.Dock="Left"
                             Margin="0,0,15,0"
-                            Foreground="{DynamicResource SukiPrimaryColor}" />
+                            DockPanel.Dock="Left"
+                            FontSize="24"
+                            Foreground="{DynamicResource SukiPrimaryColor}"
+                            Value="mdi-bell-ring" />
                         <StackPanel>
-                            <TextBlock Text="Toast 通知测试" FontSize="18" FontWeight="SemiBold" />
                             <TextBlock
-                                Text="测试各种类型的 Toast 通知"
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="Toast 通知测试" />
+                            <TextBlock
+                                Margin="0,5,0,0"
                                 FontSize="13"
                                 Opacity="0.7"
-                                Margin="0,5,0,0" />
+                                Text="测试各种类型的 Toast 通知" />
                         </StackPanel>
                     </DockPanel>
 
                     <UniformGrid Columns="3" Rows="2">
                         <Button
-                            Content="成功 Toast"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowSuccessToastCommand}"
-                            Margin="5"
-                            Height="50">
-                        </Button>
+                            Content="成功 Toast" />
 
                         <Button
-                            Content="错误 Toast"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowErrorToastCommand}"
-                            Margin="5"
-                            Height="50">
-                        </Button>
+                            Content="错误 Toast" />
 
                         <Button
-                            Content="警告 Toast"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowWarningToastCommand}"
-                            Margin="5"
-                            Height="50">
-                        </Button>
+                            Content="警告 Toast" />
 
                         <Button
-                            Content="信息 Toast"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowInfoToastCommand}"
-                            Margin="5"
-                            Height="50" />
+                            Content="信息 Toast" />
 
                         <Button
-                            Content="操作成功"
+                            Height="50"
+                            Margin="5"
                             Command="{Binding ShowOperationSuccessCommand}"
-                            Margin="5"
-                            Height="50" />
+                            Content="自定义 Toast" />
 
                         <Button
-                            Content="操作失败"
-                            Command="{Binding ShowOperationErrorCommand}"
+                            Height="50"
                             Margin="5"
-                            Height="50" />
+                            Command="{Binding ShowOperationErrorCommand}"
+                            Content="操作失败" />
                     </UniformGrid>
+                </StackPanel>
+            </sukiUi:GlassCard>
+
+            <sukiUi:GlassCard>
+                <StackPanel Spacing="8">
+                    <TextBlock>密码框测试</TextBlock>
+                    <TextBox
+                        Name="PasswordTextBox"
+                        Margin="0,0,0,25"
+                        suki:TextBoxExtensions.AddDeleteButton="True"
+                        suki:TextBoxExtensions.Prefix="{icon:MaterialIconExt Kind=Password}"
+                        Classes="revealPasswordButton"
+                        PasswordChar="*"
+                        Text="{Binding Password}"
+                        Watermark="*******" />
                 </StackPanel>
             </sukiUi:GlassCard>
         </StackPanel>

@@ -13,7 +13,7 @@
     x:Class="AvaBySuki.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
-    Title="AvaAIChat"
+    Title="AvaBySuki"
     WindowState="Maximized"
     BackgroundStyle="Bubble">
 

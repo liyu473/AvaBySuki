@@ -3,8 +3,7 @@
              x:Class="AvaBySuki.App"
              RequestedThemeVariant="Default"
              xmlns:sukiUi="clr-namespace:SukiUI;assembly=SukiUI"
-             xmlns:templates="clr-namespace:ColorPicker.AvaloniaUI.Templates;assembly=ColorPicker.AvaloniaUI"
-             xmlns:converters="clr-namespace:AvaBySuki.Converters">
+             xmlns:templates="clr-namespace:ColorPicker.AvaloniaUI.Templates;assembly=ColorPicker.AvaloniaUI">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>

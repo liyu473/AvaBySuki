@@ -5,9 +5,13 @@ namespace AvaBySuki.Views;
 
 public partial class HomePage : UserControl
 {
-    public HomePage(HomePageViewModel viewModel)
+    public HomePage()
     {
         InitializeComponent();
+    }
+    
+    public HomePage(HomePageViewModel viewModel) : this()
+    {
         DataContext = viewModel;
     }
 }

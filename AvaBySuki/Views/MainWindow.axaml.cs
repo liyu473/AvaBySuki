@@ -7,15 +7,18 @@ namespace AvaBySuki.Views;
 
 public partial class MainWindow : SukiWindow
 {
-    private readonly MainWindowViewModel _vm;
+    private readonly MainWindowViewModel? _vm;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
 
     public MainWindow(
         MainWindowViewModel vm,
         ISukiDialogManager dialogManager,
-        ISukiToastManager toastManager)
+        ISukiToastManager toastManager) : this()
     {
-        InitializeComponent();
-        
         DialogHost.Manager = dialogManager;
         ToastHost.Manager = toastManager;
 

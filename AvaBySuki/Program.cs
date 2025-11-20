@@ -44,10 +44,6 @@ internal sealed class Program
             }
             throw;
         }
-        finally
-        {
-            
-        }
     }
 
     /// <summary>

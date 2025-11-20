@@ -1,60 +1,89 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="https://github.com/projektanker/icons.avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaBySuki.Views.AboutPage">
-    
-    <StackPanel Margin="20" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Border Width="120" 
-                Height="120" 
-                CornerRadius="60"
-                Background="{DynamicResource SukiPrimaryColor}"
-                Margin="0,0,0,20">
-            <i:Icon Value="mdi-information" 
-                   FontSize="60" 
-                   Foreground="White" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" />
+<UserControl
+    x:Class="AvaBySuki.Views.AboutPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="https://github.com/projektanker/icons.avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <StackPanel
+        Margin="20"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Spacing="10">
+        <Border
+            Width="120"
+            Height="120"
+            Margin="0,0,0,20"
+            Background="{DynamicResource SukiPrimaryColor}"
+            CornerRadius="60">
+            <i:Icon
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="60"
+                Foreground="White"
+                Value="mdi-information" />
         </Border>
-        
-        <TextBlock Text="AvaAIChat" 
-                   FontSize="32" 
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center" />
-        
-        <TextBlock Text="版本 1.0.0" 
-                   FontSize="16"
-                   Opacity="0.7"
-                   HorizontalAlignment="Center"
-                   Margin="0,5,0,0" />
-        
-        <TextBlock Text="基于 Avalonia UI 和 SukiUI 构建" 
-                   FontSize="14"
-                   Opacity="0.6"
-                   HorizontalAlignment="Center"
-                   Margin="0,20,0,0" />
-        
-        <Border Margin="0,30,0,0"
-                Padding="20"
-                Background="{DynamicResource SukiCardBackground}"
-                CornerRadius="10"
-                MaxWidth="400">
+
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="32"
+            FontWeight="Bold"
+            Text="AvaBySuki" />
+
+        <TextBlock
+            Margin="0,5,0,0"
+            HorizontalAlignment="Center"
+            FontSize="16"
+            Opacity="0.7"
+            Text="版本 1.0.0" />
+
+        <TextBlock
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            FontSize="14"
+            Opacity="0.6"
+            Text="基于 Avalonia UI 和 SukiUI 构建" />
+
+        <Border
+            MaxWidth="400"
+            Margin="0,30,0,0"
+            Padding="20"
+            Background="{DynamicResource SukiCardBackground}"
+            CornerRadius="10">
             <StackPanel Spacing="8">
-                <TextBlock Text="📦 使用的技术" 
-                          FontSize="16" 
-                          FontWeight="SemiBold"
-                          HorizontalAlignment="Center"
-                          Margin="0,0,0,10" />
-                <TextBlock Text="• .NET 9.0" FontSize="13" HorizontalAlignment="Center" />
-                <TextBlock Text="• Avalonia UI 11.3" FontSize="13" HorizontalAlignment="Center" />
-                <TextBlock Text="• SukiUI 6.0" FontSize="13" HorizontalAlignment="Center" />
-                <TextBlock Text="• CommunityToolkit.Mvvm" FontSize="13" HorizontalAlignment="Center" />
-                <TextBlock Text="• Material Design Icons" FontSize="13" HorizontalAlignment="Center" />
+                <TextBlock
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Text="📦 使用的技术" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="13"
+                    Text="• .NET 9.0" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="13"
+                    Text="• Avalonia UI 11.3" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="13"
+                    Text="• SukiUI 6.0" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="13"
+                    Text="• CommunityToolkit.Mvvm" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="13"
+                    Text="• Material Design Icons" />
             </StackPanel>
         </Border>
     </StackPanel>
-    
+
 </UserControl>
 

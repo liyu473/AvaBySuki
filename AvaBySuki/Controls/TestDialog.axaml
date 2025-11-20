@@ -1,0 +1,18 @@
+<UserControl
+    x:Class="AvaBySuki.Controls.TestDialog"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel>
+            <TextBlock>自定义内容</TextBlock>
+            <TextBox />
+            <Button>你好测试</Button>
+        </StackPanel>
+    </Grid>
+
+</UserControl>
