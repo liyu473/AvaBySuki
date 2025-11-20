@@ -23,7 +23,7 @@ public class ThemeConfigService : IThemeConfigService
 
         // 获取用户配置目录
         var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var appFolder = Path.Combine(appDataPath, "AvaAIChat");
+        var appFolder = Path.Combine(appDataPath, "AvaBySuki");
 
         if (!Directory.Exists(appFolder))
         {

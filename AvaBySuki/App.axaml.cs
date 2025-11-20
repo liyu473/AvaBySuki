@@ -4,6 +4,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using ZLogger;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -92,7 +93,8 @@ public partial class App : Application
         }
         catch (Exception ex)
         {
-            Log.ForContext<App>().Fatal(ex, "应用程序初始化失败");
+            var logger = Services?.GetService<ILogger<App>>();
+            logger?.ZLogCritical(ex, $"应用程序初始化失败");
             throw;
         }
     }
@@ -102,34 +104,34 @@ public partial class App : Application
     /// </summary>
     private void SetupExceptionHandlers()
     {
-        var logger = Log.ForContext<App>();
+        var logger = Services?.GetService<ILogger<App>>();
 
         //处理未捕获的异常（非 UI 线程）
         AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
         {
             var exception = e.ExceptionObject as Exception;
-            logger.Fatal(exception, "发生未处理的异常（AppDomain）");
+            logger?.ZLogCritical(exception, $"发生未处理的异常（AppDomain）");
 
             if (e.IsTerminating)
             {
-                logger.Fatal("应用程序即将终止");
+                logger?.ZLogCritical($"应用程序即将终止");
             }
         };
 
         //处理未观察到的 Task 异常
         TaskScheduler.UnobservedTaskException += (sender, e) =>
         {
-            logger.Error(e.Exception, "发生未观察到的 Task 异常");
+            logger?.ZLogError(e.Exception, $"发生未观察到的 Task 异常");
             e.SetObserved(); // 防止程序崩溃
         };
 
         //处理 Avalonia 绑定错误
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime)
         {
-            
+            // ...
         }
 
-        logger.ZLogInformation("全局异常处理已配置");
+        logger?.ZLogInformation($"全局异常处理已配置");
     }
 
     /// <summary>
@@ -152,6 +154,7 @@ public partial class App : Application
     /// </summary>
     private void OnMainWindowClosed(object? sender, EventArgs e)
     {
-        Log.ForContext<App>().Info("主窗口已关闭");
+        var logger = Services?.GetService<ILogger<App>>();
+        logger?.ZLogInformation($"主窗口已关闭");
     }
 }

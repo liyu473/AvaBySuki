@@ -35,7 +35,14 @@ internal sealed class Program
         }
         catch (Exception ex)
         {
-           
+            Console.WriteLine($"应用程序启动失败: {ex.Message}");
+            Console.WriteLine($"异常类型: {ex.GetType().Name}");
+            Console.WriteLine($"堆栈跟踪: {ex.StackTrace}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"内部异常: {ex.InnerException.Message}");
+            }
+            throw;
         }
         finally
         {

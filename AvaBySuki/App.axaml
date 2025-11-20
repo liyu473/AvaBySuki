@@ -6,14 +6,9 @@
              xmlns:templates="clr-namespace:ColorPicker.AvaloniaUI.Templates;assembly=ColorPicker.AvaloniaUI"
              xmlns:converters="clr-namespace:AvaBySuki.Converters">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-  
-    <Application.Resources>
-        <converters:BoolToAlignmentConverter x:Key="BoolToAlignmentConverter"/>
-    </Application.Resources>
 
     <Application.Styles>
         <sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue"  />
         <templates:PixiPerfectColorPickerTheme />
-        <StyleInclude Source="avares://MarkdownAIRender/Index.axaml"/>
     </Application.Styles>
 </Application>

@@ -89,7 +89,7 @@
                     Height="80"
                     Margin="30,10,30,10"
                     Classes="AppIcon"
-                    Source="avares://AvaAIChat/Assets/TestPng.png" />
+                    Source="avares://AvaBySuki/Assets/TestPng.png" />
                 <TextBlock
                     Text="我的应用"
                     FontSize="16"
@@ -102,7 +102,7 @@
         <sukiUi:SukiSideMenu.FooterContent>
             <StackPanel HorizontalAlignment="Center" Margin="10">
                 <TextBlock
-                    Text="© 2025 AvaAIChat"
+                    Text="© 2025 AvaBySuki"
                     FontSize="12"
                     Opacity="0.6"
                     HorizontalAlignment="Center" />
