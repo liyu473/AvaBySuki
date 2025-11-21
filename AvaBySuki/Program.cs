@@ -84,8 +84,13 @@ internal sealed class Program
 
                 services.AddSingleton<HomePageViewModel>();
                 services.AddSingleton<HomePage>();
+                
                 services.AddSingleton<SettingsViewModel>();
                 services.AddSingleton<SettingsPage>();
+                
+                services.AddSingleton<WebPageViewModel>();
+                services.AddSingleton<WebViewPage>();
+                
                 services.AddTransient<AboutPage>();
             })
             .Build();

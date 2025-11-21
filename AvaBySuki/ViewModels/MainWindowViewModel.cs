@@ -49,6 +49,13 @@ public partial class MainWindowViewModel : ViewModelBase
             Icon = "mdi-information",
             PageContent = App.GetRequiredService<AboutPage>()
         });
+        
+        Pages.Add(new PageInfo
+        {
+            DisplayName = "网页",
+            Icon = "mdi-web",
+            PageContent = App.GetRequiredService<WebViewPage>()
+        });
 
         ActivePage = Pages[0];
     }

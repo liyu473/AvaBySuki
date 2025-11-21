@@ -1,21 +1,21 @@
 <sukiUi:SukiWindow
+    x:Class="AvaBySuki.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="using:AvaBySuki.ViewModels"
-    xmlns:models="using:AvaBySuki.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:i="https://github.com/projektanker/icons.avalonia"
-    mc:Ignorable="d"
-    d:DesignWidth="800"
-    d:DesignHeight="450"
-    x:Class="AvaBySuki.Views.MainWindow"
-    x:DataType="vm:MainWindowViewModel"
-    Icon="/Assets/avalonia-logo.ico"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:AvaBySuki.Models"
+    xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+    xmlns:vm="using:AvaBySuki.ViewModels"
     Title="AvaBySuki"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:MainWindowViewModel"
+    BackgroundStyle="Bubble"
+    Icon="/Assets/avalonia-logo.ico"
     WindowState="Maximized"
-    BackgroundStyle="Bubble">
+    mc:Ignorable="d">
 
     <sukiUi:SukiWindow.Hosts>
         <sukiUi:SukiDialogHost x:Name="DialogHost" />
@@ -24,23 +24,29 @@
 
     <sukiUi:SukiWindow.RightWindowTitleBarControls>
         <Button Classes="WindowControlsButton">
-            <i:Icon Value="mdi-cog" FontSize="16" />
+            <i:Icon FontSize="16" Value="mdi-cog" />
             <Button.Flyout>
                 <Flyout>
                     <Panel>
-                        <Border Margin="20" BoxShadow="{DynamicResource SukiPopupShadow}" CornerRadius="20" />
+                        <Border
+                            Margin="20"
+                            BoxShadow="{DynamicResource SukiPopupShadow}"
+                            CornerRadius="20" />
 
                         <Border
                             MinWidth="350"
+                            MinHeight="300"
                             Margin="20"
                             Padding="10"
                             Background="{DynamicResource SukiCardBackground}"
                             BorderBrush="{DynamicResource SukiLightBorderBrush}"
                             BorderThickness="1"
                             ClipToBounds="True"
-                            CornerRadius="15"
-                            MinHeight="300">
-                            <TextBlock Text="Flyout Content Here" FontSize="24" FontWeight="Bold" />
+                            CornerRadius="15">
+                            <TextBlock
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Text="Flyout Content Here" />
                         </Border>
                     </Panel>
                 </Flyout>
@@ -48,35 +54,76 @@
         </Button>
     </sukiUi:SukiWindow.RightWindowTitleBarControls>
 
-    <sukiUi:SukiSideMenu IsSearchEnabled="True" ItemsSource="{Binding Pages}" SelectedItem="{Binding ActivePage}">
-        
+    <sukiUi:SukiSideMenu
+        IsSearchEnabled="True"
+        ItemsSource="{Binding Pages}"
+        SelectedItem="{Binding ActivePage}">
+
         <!--  定义如何渲染 PageInfo 的 PageContent  -->
         <sukiUi:SukiSideMenu.DataTemplates>
             <DataTemplate DataType="models:PageInfo">
-                <ContentControl Content="{Binding PageContent}" />
+                <ContentControl Content="{Binding PageContent}">
+                    <!--  内容过渡动画  -->
+                    <ContentControl.Transitions>
+                        <Transitions>
+                            <DoubleTransition
+                                Easing="CubicEaseInOut"
+                                Property="Opacity"
+                                Duration="0:0:0.25" />
+                            <TransformOperationsTransition
+                                Easing="CubicEaseOut"
+                                Property="RenderTransform"
+                                Duration="0:0:0.3" />
+                        </Transitions>
+                    </ContentControl.Transitions>
+                </ContentControl>
             </DataTemplate>
         </sukiUi:SukiSideMenu.DataTemplates>
-        
+
         <sukiUi:SukiSideMenu.Styles>
+            <!--  Logo图标动画  -->
             <Style Selector="Image.AppIcon">
                 <Setter Property="Transitions">
                     <Transitions>
-                        <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" />
+                    </Transitions>
+                </Setter>
+                <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                <Style Selector="^:pointerover">
+                    <Setter Property="Opacity" Value="0.8" />
+                    <Setter Property="RenderTransform" Value="scale(1.05, 1.05)" />
+                </Style>
+            </Style>
+
+            <!--  菜单项动画  -->
+            <Style Selector="sukiUi|SukiSideMenuItem">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                        <TransformOperationsTransition
+                            Easing="CubicEaseOut"
+                            Property="RenderTransform"
+                            Duration="0:0:0.2" />
                     </Transitions>
                 </Setter>
                 <Style Selector="^:pointerover">
-                    <Setter Property="Opacity" Value="0.7" />
+                    <Setter Property="RenderTransform" Value="translate(5px, 0px)" />
+                </Style>
+                <Style Selector="^:pressed">
+                    <Setter Property="RenderTransform" Value="scale(0.98, 0.98)" />
                 </Style>
             </Style>
         </sukiUi:SukiSideMenu.Styles>
 
         <sukiUi:SukiSideMenu.ItemTemplate>
             <DataTemplate>
-                <sukiUi:SukiSideMenuItem Classes="Compact" 
-                                        Header="{Binding DisplayName}"
-                                        PageContent="{Binding PageContent}">
+                <sukiUi:SukiSideMenuItem
+                    Classes="Compact"
+                    Header="{Binding DisplayName}"
+                    PageContent="{Binding PageContent}">
                     <sukiUi:SukiSideMenuItem.Icon>
-                        <i:Icon Value="{Binding Icon}" FontSize="16" />
+                        <i:Icon FontSize="16" Value="{Binding Icon}" />
                     </sukiUi:SukiSideMenuItem.Icon>
                 </sukiUi:SukiSideMenuItem>
             </DataTemplate>
@@ -91,27 +138,27 @@
                     Classes="AppIcon"
                     Source="avares://AvaBySuki/Assets/TestPng.png" />
                 <TextBlock
-                    Text="我的应用"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
                     FontSize="16"
                     FontWeight="Bold"
-                    HorizontalAlignment="Center"
-                    Margin="0,0,0,10" />
+                    Text="我的应用" />
             </StackPanel>
         </sukiUi:SukiSideMenu.HeaderContent>
 
         <sukiUi:SukiSideMenu.FooterContent>
-            <StackPanel HorizontalAlignment="Center" Margin="10">
+            <StackPanel Margin="10" HorizontalAlignment="Center">
                 <TextBlock
-                    Text="© 2025 AvaBySuki"
+                    HorizontalAlignment="Center"
                     FontSize="12"
                     Opacity="0.6"
-                    HorizontalAlignment="Center" />
+                    Text="© 2025 AvaBySuki" />
                 <TextBlock
-                    Text="版本 1.0.0"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Center"
                     FontSize="10"
                     Opacity="0.5"
-                    HorizontalAlignment="Center"
-                    Margin="0,5,0,0" />
+                    Text="版本 1.0.0" />
             </StackPanel>
         </sukiUi:SukiSideMenu.FooterContent>
     </sukiUi:SukiSideMenu>

@@ -1,0 +1,61 @@
+<UserControl
+    x:Class="AvaBySuki.Views.WebViewPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="https://github.com/projektanker/icons.avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:theme="https://github.com/kikipoulet/SukiUI"
+    xmlns:vm="using:AvaBySuki.ViewModels"
+    xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:WebPageViewModel"
+    mc:Ignorable="d">
+
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel
+            Margin="10,10,10,0"
+            Orientation="Horizontal"
+            Spacing="8">
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Classes="Basic Icon"
+                    Command="{Binding GoBackCommand}"
+                    CommandParameter="{Binding ElementName=WebView}"
+                    Cursor="hand">
+                    <i:Icon FontSize="20" Value="mdi-arrow-left" />
+                </Button>
+                <Button
+                    Classes="Basic Icon"
+                    Command="{Binding GoForwardCommand}"
+                    CommandParameter="{Binding ElementName=WebView}"
+                    Cursor="hand">
+                    <i:Icon FontSize="20" Value="mdi-arrow-right" />
+                </Button>
+            </StackPanel>
+            <TextBox
+                Width="600"
+                theme:TextBoxExtensions.AddDeleteButton="True"
+                Text="{Binding Address}" />
+            <Button
+                VerticalAlignment="Center"
+                Classes="Outlined Rounded"
+                Command="{Binding ShowToolsCommand}"
+                CommandParameter="{Binding ElementName=WebView}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <i:Icon FontSize="16" Value="mdi-tools" />
+                    <TextBlock VerticalAlignment="Center" Text="工具" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <webview:WebView
+            x:Name="WebView"
+            Grid.Row="1"
+            Margin="10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Address="{Binding Address}"
+            Focusable="True" />
+    </Grid>
+</UserControl>
