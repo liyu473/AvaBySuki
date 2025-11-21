@@ -18,4 +18,4 @@
 
 ## WebView
 
-![Web](docs\images\web.png)
+![Web](docs/images/web.png)
