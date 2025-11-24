@@ -30,4 +30,4 @@
 
 ## PaletteNet
 
-![PaletteNet](docs\images\PaletteNet.png)
+![PaletteNet](docs/images/PaletteNet.png)
