@@ -1,0 +1,268 @@
+<UserControl
+    x:Class="AvaBySuki.Views.ImagePalettePage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="https://github.com/projektanker/icons.avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+    xmlns:vm="using:AvaBySuki.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="1000"
+    x:DataType="vm:ImagePaletteViewModel"
+    mc:Ignorable="d">
+
+    <ScrollViewer>
+        <StackPanel
+            MaxWidth="1200"
+            Margin="20"
+            Spacing="20">
+
+            <!--  页面标题  -->
+            <StackPanel Spacing="5">
+                <TextBlock
+                    FontSize="32"
+                    FontWeight="Bold"
+                    Text="图片颜色提取器" />
+                <TextBlock
+                    FontSize="14"
+                    Opacity="0.6"
+                    Text="从图片中提取主色调和配色方案" />
+            </StackPanel>
+
+            <!--  图片选择区域  -->
+            <sukiUi:GlassCard Padding="25" CornerRadius="15">
+                <StackPanel Spacing="15">
+                    <DockPanel>
+                        <i:Icon
+                            Margin="0,0,15,0"
+                            DockPanel.Dock="Left"
+                            FontSize="24"
+                            Foreground="{DynamicResource SukiPrimaryColor}"
+                            Value="mdi-image-plus" />
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="选择图片" />
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                FontSize="13"
+                                Opacity="0.7"
+                                Text="支持 PNG, JPG, BMP, GIF, WebP 格式" />
+                        </StackPanel>
+                    </DockPanel>
+
+                    <Button
+                        HorizontalAlignment="Left"
+                        Command="{Binding SelectImageCommand}"
+                        Content="浏览文件..."
+                        IsEnabled="{Binding !IsProcessing}">
+                        <Button.Styles>
+                            <Style Selector="Button">
+                                <Setter Property="Padding" Value="20,10" />
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+
+                    <TextBlock
+                        FontSize="12"
+                        IsVisible="{Binding ImagePath, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        Opacity="0.7"
+                        Text="{Binding ImagePath, StringFormat='已选择: {0}'}" />
+                </StackPanel>
+            </sukiUi:GlassCard>
+
+            <!--  图片预览区域  -->
+            <sukiUi:GlassCard
+                Padding="25"
+                CornerRadius="15"
+                IsVisible="{Binding SelectedImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <StackPanel Spacing="15">
+                    <DockPanel>
+                        <i:Icon
+                            Margin="0,0,15,0"
+                            DockPanel.Dock="Left"
+                            FontSize="24"
+                            Foreground="{DynamicResource SukiPrimaryColor}"
+                            Value="mdi-image-outline" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            Text="图片预览" />
+                    </DockPanel>
+
+                    <Border
+                        MaxHeight="400"
+                        HorizontalAlignment="Center"
+                        Background="{DynamicResource SukiBackground}"
+                        BorderBrush="{DynamicResource SukiBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <Image
+                            MaxWidth="600"
+                            Source="{Binding SelectedImage}"
+                            Stretch="Uniform" />
+                    </Border>
+                </StackPanel>
+            </sukiUi:GlassCard>
+
+            <!--  处理中提示  -->
+            <sukiUi:GlassCard
+                Padding="20"
+                CornerRadius="15"
+                IsVisible="{Binding IsProcessing}">
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    Spacing="10">
+                    <ProgressBar IsIndeterminate="True" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="14"
+                        Text="正在提取颜色..." />
+                </StackPanel>
+            </sukiUi:GlassCard>
+
+            <!--  主要颜色展示  -->
+            <sukiUi:GlassCard
+                Padding="25"
+                CornerRadius="15"
+                IsVisible="{Binding DominantColor, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <StackPanel Spacing="20">
+                    <DockPanel>
+                        <i:Icon
+                            Margin="0,0,15,0"
+                            DockPanel.Dock="Left"
+                            FontSize="24"
+                            Foreground="{DynamicResource SukiPrimaryColor}"
+                            Value="mdi-palette" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            Text="提取的主要颜色" />
+                    </DockPanel>
+
+                    <!--  主色调大卡片  -->
+                    <Border
+                        Padding="30"
+                        Background="{Binding DominantColor.ColorBrush}"
+                        CornerRadius="12">
+                        <StackPanel Spacing="10">
+                            <TextBlock
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Foreground="{Binding DominantColor.TitleTextBrush}"
+                                Text="{Binding DominantColor.Name}" />
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Foreground="{Binding DominantColor.BodyTextBrush}"
+                                Text="{Binding DominantColor.HexColor}" />
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="{Binding DominantColor.BodyTextBrush}"
+                                Opacity="0.8"
+                                Text="{Binding DominantColor.Population, StringFormat='像素数: {0}'}" />
+                            <Button
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Left"
+                                Background="{Binding DominantColor.TitleTextBrush}"
+                                Command="{Binding CopyColorCodeCommand}"
+                                CommandParameter="{Binding DominantColor}"
+                                Content="复制颜色代码"
+                                Foreground="{Binding DominantColor.ColorBrush}">
+                                <Button.Styles>
+                                    <Style Selector="Button">
+                                        <Setter Property="Padding" Value="15,8" />
+                                    </Style>
+                                </Button.Styles>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </sukiUi:GlassCard>
+
+            <!--  所有提取的颜色  -->
+            <sukiUi:GlassCard
+                Padding="25"
+                CornerRadius="15"
+                IsVisible="{Binding ExtractedColors.Count}">
+                <StackPanel Spacing="20">
+                    <DockPanel>
+                        <i:Icon
+                            Margin="0,0,15,0"
+                            DockPanel.Dock="Left"
+                            FontSize="24"
+                            Foreground="{DynamicResource SukiPrimaryColor}"
+                            Value="mdi-palette-swatch" />
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="完整配色方案" />
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                FontSize="13"
+                                Opacity="0.7"
+                                Text="点击颜色卡片复制颜色代码" />
+                        </StackPanel>
+                    </DockPanel>
+
+                    <ItemsControl ItemsSource="{Binding ExtractedColors}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Margin="5"
+                                    Padding="0"
+                                    Command="{Binding $parent[UserControl].((vm:ImagePaletteViewModel)DataContext).CopyColorCodeCommand}"
+                                    CommandParameter="{Binding}"
+                                    CornerRadius="10">
+                                    <Button.Styles>
+                                        <Style Selector="Button">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="0" />
+                                        </Style>
+                                        <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </Button.Styles>
+                                    <Border
+                                        Padding="20"
+                                        Background="{Binding ColorBrush}"
+                                        CornerRadius="10">
+                                        <Grid RowDefinitions="Auto,Auto,Auto">
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Foreground="{Binding TitleTextBrush}"
+                                                Text="{Binding Name}" />
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Margin="0,5,0,0"
+                                                FontSize="14"
+                                                Foreground="{Binding BodyTextBrush}"
+                                                Text="{Binding HexColor}" />
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Margin="0,3,0,0"
+                                                FontSize="11"
+                                                Foreground="{Binding BodyTextBrush}"
+                                                Opacity="0.7"
+                                                Text="{Binding Population, StringFormat='像素: {0}'}" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </sukiUi:GlassCard>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

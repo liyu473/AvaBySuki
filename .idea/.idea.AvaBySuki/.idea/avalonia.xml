@@ -7,6 +7,7 @@
         <entry key="AvaBySuki/Controls/TestDialog.axaml" value="AvaBySuki/AvaBySuki.csproj" />
         <entry key="AvaBySuki/Views/AboutPage.axaml" value="AvaBySuki/AvaBySuki.csproj" />
         <entry key="AvaBySuki/Views/HomePage.axaml" value="AvaBySuki/AvaBySuki.csproj" />
+        <entry key="AvaBySuki/Views/ImagePalettePage.axaml" value="AvaBySuki/AvaBySuki.csproj" />
         <entry key="AvaBySuki/Views/MainWindow.axaml" value="AvaBySuki/AvaBySuki.csproj" />
         <entry key="AvaBySuki/Views/SettingsPage.axaml" value="AvaBySuki/AvaBySuki.csproj" />
         <entry key="AvaBySuki/Views/WebView.axaml" value="AvaBySuki/AvaBySuki.csproj" />

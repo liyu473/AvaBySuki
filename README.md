@@ -1,6 +1,14 @@
 # AvaBySuki
 
+该测试项目测试了：
 
+1.suki内部提供的dialog和toast相关api
+
+2.主题切换
+
+3.webview
+
+4.提取图片主题色
 
 ## 测试suki 内置的dialog与toast
 
@@ -19,3 +27,7 @@
 ## WebView
 
 ![Web](docs/images/web.png)
+
+## PaletteNet
+
+![PaletteNet](docs\images\PaletteNet.png)

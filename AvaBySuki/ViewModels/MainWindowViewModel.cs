@@ -56,6 +56,13 @@ public partial class MainWindowViewModel : ViewModelBase
             Icon = "mdi-web",
             PageContent = App.GetRequiredService<WebViewPage>()
         });
+        
+        Pages.Add(new PageInfo
+        {
+            DisplayName = "图片颜色",
+            Icon = "mdi-palette",
+            PageContent = App.GetRequiredService<ImagePalettePage>()
+        });
 
         ActivePage = Pages[0];
     }

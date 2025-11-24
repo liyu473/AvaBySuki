@@ -91,6 +91,9 @@ internal sealed class Program
                 services.AddSingleton<WebPageViewModel>();
                 services.AddSingleton<WebViewPage>();
                 
+                services.AddSingleton<ImagePaletteViewModel>();
+                services.AddSingleton<ImagePalettePage>();
+                
                 services.AddTransient<AboutPage>();
             })
             .Build();

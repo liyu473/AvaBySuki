@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <LangVersion>preview</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -40,6 +41,8 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0-rc.1.25451.107" />
         
         <PackageReference Include="SukiUI" Version="6.0.4-nightly20251107" />
+        
+        <PackageReference Include="PaletteNet" Version="3.0.1" />
         
         <PackageReference Include="WebViewControl-Avalonia" Version="3.120.10" />
     </ItemGroup>
