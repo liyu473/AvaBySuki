@@ -20,27 +20,27 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.7" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.7" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.7" />
+        <PackageReference Include="Avalonia" Version="11.3.9" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.9" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.9" />
         
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.7">
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.9">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="LyuExtensions" Version="1.1.5" />
-        <PackageReference Include="LyuLogExtension" Version="1.3.3" />
+        <PackageReference Include="LyuExtensions" Version="1.1.6" />
+        <PackageReference Include="LyuLogExtension" Version="1.6.2" />
         <PackageReference Include="Material.Icons.Avalonia" Version="3.0.0-preview3.1" />
         <PackageReference Include="PixiEditor.ColorPicker.AvaloniaUI" Version="1.0.7" />
         <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
         <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.6.2" />
-        <PackageReference Include="HotAvalonia" Version="3.0.0" PrivateAssets="All" Publish="True" />
+        <PackageReference Include="HotAvalonia" Version="3.0.1" PrivateAssets="All" Publish="True" />
         
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0-rc.1.25451.107" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
         
-        <PackageReference Include="SukiUI" Version="6.0.4-nightly20251107" />
+        <PackageReference Include="SukiUI" Version="6.0.4-nightly20251128" />
         
         <PackageReference Include="PaletteNet" Version="3.0.1" />
         

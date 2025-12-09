@@ -1,4 +1,8 @@
+using AvaBySuki.Services;
+using AvaBySuki.ViewModels;
+using AvaBySuki.Views;
 using Avalonia;
+using LogExtension.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,10 +12,6 @@ using SukiUI.Dialogs;
 using SukiUI.Toasts;
 using System;
 using System.IO;
-using AvaBySuki.Services;
-using AvaBySuki.ViewModels;
-using AvaBySuki.Views;
-using LogExtension;
 
 namespace AvaBySuki;
 
@@ -68,7 +68,7 @@ internal sealed class Program
             .ConfigureServices((context, services) =>
             {
                 services.AddZLogger();
-                
+
                 // 注册配置
                 services.AddSingleton(configuration);
 
@@ -84,16 +84,16 @@ internal sealed class Program
 
                 services.AddSingleton<HomePageViewModel>();
                 services.AddSingleton<HomePage>();
-                
+
                 services.AddSingleton<SettingsViewModel>();
                 services.AddSingleton<SettingsPage>();
-                
+
                 services.AddSingleton<WebPageViewModel>();
                 services.AddSingleton<WebViewPage>();
-                
+
                 services.AddSingleton<ImagePaletteViewModel>();
                 services.AddSingleton<ImagePalettePage>();
-                
+
                 services.AddTransient<AboutPage>();
             })
             .Build();
