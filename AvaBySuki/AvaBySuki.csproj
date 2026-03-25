@@ -14,7 +14,7 @@
 		<MetalamaAllowPreviewLanguageFeatures>true</MetalamaAllowPreviewLanguageFeatures>
         <AvaloniaLicenseKey>None</AvaloniaLicenseKey>
         <WarningsNotAsErrors>AVLIC0001</WarningsNotAsErrors>
-        <NoWarn>$(NoWarn);AVLIC0001</NoWarn>
+        <NoWarn>$(NoWarn);AVLIC0001;CS8618</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

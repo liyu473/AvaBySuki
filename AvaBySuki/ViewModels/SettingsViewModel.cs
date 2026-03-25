@@ -39,16 +39,16 @@ public partial class SettingsViewModel : ViewModelBase
     private bool _isInitializing = true;
 
     [ObservableProperty]
-    private ThemeVariant _currentTheme;
+    public partial ThemeVariant CurrentTheme { get; set; }
 
     [ObservableProperty]
-    private SukiColorTheme? _selectedColorTheme;
+    public partial SukiColorTheme? SelectedColorTheme { get; set; }
 
     [ObservableProperty]
-    private Color _customColor = Colors.DeepSkyBlue;
+    public partial Color CustomColor { get; set; } = Colors.DeepSkyBlue;
 
     [ObservableProperty]
-    private Color _dialogCustomColor = Colors.DeepSkyBlue;
+    public partial Color DialogCustomColor { get; set; } = Colors.DeepSkyBlue;
 
     /// <summary>
     /// 可用的主题颜色列表（包含系统自带和自定义）
@@ -58,7 +58,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// 自定义颜色主题列表（用于持久化）
     /// </summary>
-    public ObservableCollection<SukiColorTheme> CustomColorThemes { get; } = new();
+    public ObservableCollection<SukiColorTheme> CustomColorThemes { get; } = [];
 
     /// <summary>
     /// 当前主题显示名称
@@ -451,12 +451,12 @@ public partial class SettingsViewModel : ViewModelBase
             {
                 ThemeVariant = CurrentTheme == ThemeVariant.Dark ? "Dark" : "Light",
                 SelectedColorThemeName = SelectedColorTheme?.DisplayName,
-                CustomColorThemes = CustomColorThemes.Select(theme => new CustomColorTheme
+                CustomColorThemes = [.. CustomColorThemes.Select(theme => new CustomColorTheme
                 {
                     Name = theme.DisplayName ?? "Custom",
                     PrimaryColor = theme.Primary.ToUInt32(),
                     AccentColor = theme.Accent.ToUInt32()
-                }).ToList()
+                })]
             };
 
             await _themeConfigService.SaveSettingsAsync(settings);

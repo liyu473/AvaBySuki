@@ -27,37 +27,37 @@ public partial class ImagePaletteViewModel : ViewModelBase
     private readonly ISukiToastManager _toastManager;
 
     [ObservableProperty]
-    private Bitmap? _selectedImage;
+    public partial Bitmap? SelectedImage { get; set; }
 
     [ObservableProperty]
-    private string? _imagePath;
+    public partial string? ImagePath { get; set; }
 
     [ObservableProperty]
-    private bool _isProcessing;
+    public partial bool IsProcessing { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<ColorInfo> _extractedColors = new();
+    public partial ObservableCollection<ColorInfo> ExtractedColors { get; set; } = new();
 
     [ObservableProperty]
-    private ColorInfo? _dominantColor;
+    public partial ColorInfo? DominantColor { get; set; }
 
     [ObservableProperty]
-    private ColorInfo? _vibrantColor;
+    public partial ColorInfo? VibrantColor { get; set; }
 
     [ObservableProperty]
-    private ColorInfo? _mutedColor;
+    public partial ColorInfo? MutedColor { get; set; }
 
     [ObservableProperty]
-    private ColorInfo? _lightVibrantColor;
+    public partial ColorInfo? LightVibrantColor { get; set; }
 
     [ObservableProperty]
-    private ColorInfo? _darkVibrantColor;
+    public partial ColorInfo? DarkVibrantColor { get; set; }
 
     [ObservableProperty]
-    private ColorInfo? _lightMutedColor;
+    public partial ColorInfo? LightMutedColor { get; set; }
 
     [ObservableProperty]
-    private ColorInfo? _darkMutedColor;
+    public partial ColorInfo? DarkMutedColor { get; set; }
 
 
     [RelayCommand]
@@ -80,13 +80,13 @@ public partial class ImagePaletteViewModel : ViewModelBase
             {
                 Title = "选择图片",
                 AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
+                FileTypeFilter =
+                [
                     new FilePickerFileType("图片文件")
                     {
-                        Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.webp" }
+                        Patterns = ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.webp"]
                     }
-                }
+                ]
             });
 
             if (files.Count > 0)

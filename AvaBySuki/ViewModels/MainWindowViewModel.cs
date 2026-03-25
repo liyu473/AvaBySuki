@@ -13,13 +13,13 @@ public partial class MainWindowViewModel : ViewModelBase
     /// 页面集合
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<PageInfo> _pages = [];
+    public partial ObservableCollection<PageInfo> Pages { get; set; } = [];
 
     /// <summary>
     /// 当前选中的页面
     /// </summary>
     [ObservableProperty]
-    private PageInfo? _activePage;
+    public partial PageInfo? ActivePage { get; set; }
 
     public MainWindowViewModel()
     {

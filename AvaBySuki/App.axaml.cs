@@ -31,12 +31,7 @@ public partial class App : Application
         }
 
         var service = Services.GetService<T>();
-        if (service == null)
-        {
-            throw new InvalidOperationException($"服务 {typeof(T).Name} 未注册。");
-        }
-
-        return service;
+        return service ?? throw new InvalidOperationException($"服务 {typeof(T).Name} 未注册。");
     }
 
     /// <summary>

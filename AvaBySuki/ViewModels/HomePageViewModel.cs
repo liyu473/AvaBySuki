@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using AvaBySuki.Controls;
 using AvaBySuki.Extensions;
 using Avalonia.Controls.Notifications;
@@ -8,6 +7,7 @@ using LyuExtensions.Aspects;
 using Microsoft.Extensions.Logging;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
+using System.Threading.Tasks;
 
 namespace AvaBySuki.ViewModels;
 
@@ -22,7 +22,7 @@ public partial class HomePageViewModel : ViewModelBase
 
     [Inject]
     private readonly ISukiToastManager _toastManager;
-    
+
     [ObservableProperty]
     public partial string Password { get; set; } = string.Empty;
 
