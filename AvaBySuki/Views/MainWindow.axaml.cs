@@ -1,28 +1,24 @@
 using AvaBySuki.ViewModels;
+using LyuExtensions.Aspects;
 using SukiUI.Controls;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
 namespace AvaBySuki.Views;
 
+[Transient]
 public partial class MainWindow : SukiWindow
 {
+    [Inject]
     private readonly MainWindowViewModel? _vm;
 
-    public MainWindow()
+    public MainWindow(ISukiDialogManager dialogManager, ISukiToastManager toastManager)
     {
         InitializeComponent();
-    }
 
-    public MainWindow(
-        MainWindowViewModel vm,
-        ISukiDialogManager dialogManager,
-        ISukiToastManager toastManager) : this()
-    {
         DialogHost.Manager = dialogManager;
         ToastHost.Manager = toastManager;
 
-        DataContext = vm;
-        _vm = vm;
+        DataContext = _vm;
     }
 }

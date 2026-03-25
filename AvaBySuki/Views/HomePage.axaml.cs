@@ -1,17 +1,19 @@
 using Avalonia.Controls;
 using AvaBySuki.ViewModels;
+using LyuExtensions.Aspects;
 
 namespace AvaBySuki.Views;
 
+[Transient]
 public partial class HomePage : UserControl
 {
-    public HomePage()
+
+    [Inject]
+    private readonly HomePageViewModel _vm;
+
+    public HomePage() 
     {
         InitializeComponent();
-    }
-    
-    public HomePage(HomePageViewModel viewModel) : this()
-    {
-        DataContext = viewModel;
+        DataContext = _vm;
     }
 }

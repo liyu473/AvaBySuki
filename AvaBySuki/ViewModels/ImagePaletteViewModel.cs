@@ -12,12 +12,18 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using PaletteNet;
 using SukiUI.Toasts;
+using LyuExtensions.Aspects;
+using Avalonia.Input.Platform;
 
 namespace AvaBySuki.ViewModels;
 
+[Singleton]
 public partial class ImagePaletteViewModel : ViewModelBase
 {
+    [Inject]
     private readonly ILogger<ImagePaletteViewModel> _logger;
+
+    [Inject]
     private readonly ISukiToastManager _toastManager;
 
     [ObservableProperty]
@@ -53,13 +59,6 @@ public partial class ImagePaletteViewModel : ViewModelBase
     [ObservableProperty]
     private ColorInfo? _darkMutedColor;
 
-    public ImagePaletteViewModel(
-        ILogger<ImagePaletteViewModel> logger,
-        ISukiToastManager toastManager)
-    {
-        _logger = logger;
-        _toastManager = toastManager;
-    }
 
     [RelayCommand]
     private async Task SelectImage()

@@ -2,9 +2,11 @@
 using System.Collections.ObjectModel;
 using AvaBySuki.Models;
 using AvaBySuki.Views;
+using LyuExtensions.Aspects;
 
 namespace AvaBySuki.ViewModels;
 
+[Singleton]
 public partial class MainWindowViewModel : ViewModelBase
 {
     /// <summary>

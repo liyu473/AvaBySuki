@@ -1,8 +1,6 @@
-using AvaBySuki.Services;
-using AvaBySuki.ViewModels;
-using AvaBySuki.Views;
 using Avalonia;
-using LogExtension.Extensions;
+using LyuExtensions.Extensions;
+using LyuLogExtension.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -76,25 +74,7 @@ internal sealed class Program
                 services.AddSingleton<ISukiDialogManager, SukiDialogManager>();
                 services.AddSingleton<ISukiToastManager, SukiToastManager>();
 
-                // 主题服务
-                services.AddSingleton<IThemeConfigService, ThemeConfigService>();
-
-                services.AddSingleton<MainWindowViewModel>();
-                services.AddSingleton<MainWindow>();
-
-                services.AddSingleton<HomePageViewModel>();
-                services.AddSingleton<HomePage>();
-
-                services.AddSingleton<SettingsViewModel>();
-                services.AddSingleton<SettingsPage>();
-
-                services.AddSingleton<WebPageViewModel>();
-                services.AddSingleton<WebViewPage>();
-
-                services.AddSingleton<ImagePaletteViewModel>();
-                services.AddSingleton<ImagePalettePage>();
-
-                services.AddTransient<AboutPage>();
+                services.RegisterServices();
             })
             .Build();
     }

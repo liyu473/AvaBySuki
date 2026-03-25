@@ -1,10 +1,12 @@
+using AvaBySuki.Models;
+using AvaBySuki.Services;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
-using AvaBySuki.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LyuExtensions.Aspects;
 using Microsoft.Extensions.Logging;
 using SukiUI;
 using SukiUI.Dialogs;
@@ -13,17 +15,22 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaBySuki.Models;
-using AvaBySuki.Services;
 using ZLogger;
 
 namespace AvaBySuki.ViewModels;
 
+[Singleton]
 public partial class SettingsViewModel : ViewModelBase
 {
     private readonly SukiTheme _sukiTheme;
+
+    [Inject]
     private readonly ILogger<SettingsViewModel> _logger;
+
+    [Inject]
     private readonly ISukiDialogManager _dialogManager;
+
+    [Inject]
     private readonly IThemeConfigService _themeConfigService;
 
     /// <summary>
@@ -73,14 +80,8 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
 
-    public SettingsViewModel(
-        ILogger<SettingsViewModel> logger,
-        ISukiDialogManager dialogManager,
-        IThemeConfigService themeConfigService)
+    public SettingsViewModel()
     {
-        _logger = logger;
-        _dialogManager = dialogManager;
-        _themeConfigService = themeConfigService;
         _sukiTheme = SukiTheme.GetInstance();
 
         // 初始化可用颜色列表（系统自带）

@@ -1,9 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LyuExtensions.Aspects;
 using WebViewControl;
 
 namespace AvaBySuki.ViewModels;
 
+[Singleton]
 public partial class WebPageViewModel : ViewModelBase
 {
     [ObservableProperty]

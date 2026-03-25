@@ -1,10 +1,11 @@
-using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AvaBySuki.Models;
-using Extensions;
+using LyuExtensions.Aspects;
+using LyuExtensions.Extensions;
+using Microsoft.Extensions.Logging;
 using ZLogger;
 
 namespace AvaBySuki.Services;
@@ -12,6 +13,7 @@ namespace AvaBySuki.Services;
 /// <summary>
 /// 主题配置服务实现
 /// </summary>
+[Singleton(ServiceType = typeof(IThemeConfigService))]
 public class ThemeConfigService : IThemeConfigService
 {
     private readonly ILogger<ThemeConfigService> _logger;
@@ -59,8 +61,8 @@ public class ThemeConfigService : IThemeConfigService
         }
     }
 
-
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+
     /// <summary>
     /// 保存主题设置
     /// </summary>

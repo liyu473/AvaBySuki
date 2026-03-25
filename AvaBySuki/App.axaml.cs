@@ -1,14 +1,12 @@
+using AvaBySuki.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using ZLogger;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using AvaBySuki.Views;
+using ZLogger;
 
 namespace AvaBySuki;
 
@@ -81,9 +79,6 @@ public partial class App : Application
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit.
-                DisableAvaloniaDataAnnotationValidation();
-
                 desktop.MainWindow = GetRequiredService<MainWindow>();
 
                 desktop.MainWindow.Closed += OnMainWindowClosed;
@@ -134,20 +129,6 @@ public partial class App : Application
         logger?.ZLogInformation($"全局异常处理已配置");
     }
 
-    /// <summary>
-    /// 禁用 Avalonia 的数据注解验证（避免与 CommunityToolkit 冲突）
-    /// </summary>
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        var dataValidationPluginsToRemove = BindingPlugins
-            .DataValidators.OfType<DataAnnotationsValidationPlugin>()
-            .ToArray();
-
-        foreach (var plugin in dataValidationPluginsToRemove)
-        {
-            BindingPlugins.DataValidators.Remove(plugin);
-        }
-    }
 
     /// <summary>
     /// 主窗口关闭事件处理

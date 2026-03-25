@@ -398,3 +398,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Local .NET CLI home/cache (Codex/CI local env)
+.dotnet_home/
+.dotnet/

@@ -4,31 +4,27 @@ using AvaBySuki.Extensions;
 using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LyuExtensions.Aspects;
 using Microsoft.Extensions.Logging;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
 namespace AvaBySuki.ViewModels;
 
+[Singleton]
 public partial class HomePageViewModel : ViewModelBase
 {
+    [Inject]
     private readonly ILogger<HomePageViewModel> _logger;
+
+    [Inject]
     private readonly ISukiDialogManager _dialogManager;
+
+    [Inject]
     private readonly ISukiToastManager _toastManager;
     
     [ObservableProperty]
     public partial string Password { get; set; } = string.Empty;
-
-    public HomePageViewModel(
-        ILogger<HomePageViewModel> logger,
-        ISukiDialogManager dialogManager,
-        ISukiToastManager toastManager
-    )
-    {
-        _logger = logger;
-        _dialogManager = dialogManager;
-        _toastManager = toastManager;
-    }
 
     #region Dialog 测试
 
