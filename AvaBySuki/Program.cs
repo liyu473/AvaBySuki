@@ -1,15 +1,18 @@
 using Avalonia;
 using LyuExtensions.Extensions;
+using LyuLogExtension.Builder;
 using LyuLogExtension.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 using System;
 using System.IO;
+using ZLogger.Providers;
 
 namespace AvaBySuki;
 
@@ -65,7 +68,19 @@ internal sealed class Program
         return Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                services.AddZLogger();
+                //LyuLogExtension
+                services.AddZLogger(builder =>
+                    builder
+                        .WithRetentionDays(30)
+                        .WithCleanupInterval(TimeSpan.FromHours(2))
+                        .FilterMicrosoft()
+                        .FilterSystem()
+                        .WithRollingInterval(RollingInterval.Hour)
+                        .WithRollingSizeKB(1024 * 50)
+                        .AddInfoOutput() // 默认info以上，logs/
+                        .AddFileOutput("logs/trace/", LogLevel.Trace)
+                        .AddFileOutput("logs/debug/", LogLevel.Debug, LogLevel.Debug)
+                );
 
                 // 注册配置
                 services.AddSingleton(configuration);

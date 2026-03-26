@@ -44,14 +44,8 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     public partial SukiColorTheme? SelectedColorTheme { get; set; }
 
-    [ObservableProperty]
-    public partial Color CustomColor { get; set; } = Colors.DeepSkyBlue;
-
-    [ObservableProperty]
-    public partial Color DialogCustomColor { get; set; } = Colors.DeepSkyBlue;
-
     /// <summary>
-    /// 可用的主题颜色列表（包含系统自带和自定义）
+    /// 可用的主题颜色列表(包含系统自带和自定义)
     /// </summary>
     public ObservableCollection<SukiColorTheme> AvailableColors { get; }
 
@@ -112,7 +106,7 @@ public partial class SettingsViewModel : ViewModelBase
             _sukiTheme.ChangeColorTheme(currentColorTheme);
         }
 
-        _logger.ZLogInformation($"主题已切换到: {CurrentThemeName}");
+        _logger.ZLogDebug($"主题已切换到: {CurrentThemeName}");
         OnPropertyChanged(nameof(CurrentThemeName));
         OnPropertyChanged(nameof(IsDarkTheme));
     }
@@ -135,7 +129,7 @@ public partial class SettingsViewModel : ViewModelBase
                 _sukiTheme.ChangeColorTheme(currentColorTheme);
             }
 
-            _logger.ZLogInformation($"切换到浅色主题");
+            _logger.ZLogDebug($"切换到浅色主题");
             OnPropertyChanged(nameof(CurrentThemeName));
             OnPropertyChanged(nameof(IsDarkTheme));
         }
@@ -158,7 +152,7 @@ public partial class SettingsViewModel : ViewModelBase
                 _sukiTheme.ChangeColorTheme(currentColorTheme);
             }
 
-            _logger.ZLogInformation($"切换到深色主题");
+            _logger.ZLogDebug($"切换到深色主题");
             OnPropertyChanged(nameof(CurrentThemeName));
             OnPropertyChanged(nameof(IsDarkTheme));
         }
@@ -177,10 +171,10 @@ public partial class SettingsViewModel : ViewModelBase
     /// 应用自定义颜色
     /// </summary>
     [RelayCommand]
-    private void ApplyCustomColor()
+    private void ApplyCustomColor(Color customColor)
     {
-        // 创建自定义颜色主题（主色和强调色使用相同颜色）
-        var customTheme = new SukiColorTheme("Custom", CustomColor, CustomColor);
+        // 创建自定义颜色主题(主色和强调色使用相同颜色)
+        var customTheme = new SukiColorTheme("Custom", customColor, customColor);
 
         // 检查是否已有自定义主题
         var existingCustom = AvailableColors.FirstOrDefault(c => c.DisplayName == "Custom");
@@ -192,7 +186,7 @@ public partial class SettingsViewModel : ViewModelBase
         _sukiTheme.ChangeColorTheme(customTheme);
         SelectedColorTheme = customTheme;
 
-        _logger.ZLogInformation($"应用自定义颜色: {CustomColor}");
+        _logger.ZLogDebug($"应用自定义颜色: {customColor}");
     }
 
     /// <summary>
@@ -201,90 +195,23 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void ShowAddCustomColorDialog()
     {
-        var colorPicker = new ColorPicker.StandardColorPicker
-        {
-            Width = 300,
-            Height = 400,
-            ShowAlpha = false,
-            HorizontalAlignment = HorizontalAlignment.Center
-        };
-
-        try
-        {
-            colorPicker.Color = new ColorPicker.Models.NotifyableColor(colorPicker)
-            {
-                RGB_R = DialogCustomColor.R,
-                RGB_G = DialogCustomColor.G,
-                RGB_B = DialogCustomColor.B
-            };
-            _logger.ZLogInformation($"初始化颜色选择器，颜色: {DialogCustomColor}");
-        }
-        catch (Exception ex)
-        {
-            _logger.ZLogError(ex, $"初始化颜色选择器失败");
-        }
-
-        // 监听颜色变化
-        colorPicker.PropertyChanged += (sender, e) =>
-        {
-            if (e.Property == ColorPicker.PickerControlBase.ColorProperty &&
-                e.NewValue is ColorPicker.Models.NotifyableColor notifyableColor)
-            {
-                try
-                {
-                    var newColor = Color.FromArgb(255,
-                        (byte)notifyableColor.RGB_R,
-                        (byte)notifyableColor.RGB_G,
-                        (byte)notifyableColor.RGB_B);
-                    DialogCustomColor = newColor;
-                    _logger.ZLogInformation($"颜色已更新: {newColor}");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "更新颜色失败");
-                }
-            }
-        };
-
-        var content = new StackPanel
-        {
-            Spacing = 20,
-            Children =
-            {
-                new TextBlock
-                {
-                    Text = "选择您喜欢的颜色作为主题色",
-                    FontSize = 15,
-                    TextAlignment = TextAlignment.Center,
-                    FontWeight = FontWeight.Medium
-                },
-                colorPicker
-            }
-        };
+        var dialog = new Controls.CustomColorDialog();
 
         _dialogManager.CreateDialog()
             .WithTitle("添加自定义颜色")
-            .WithContent(content)
+            .WithContent(dialog)
             .WithActionButton("应用", _ =>
             {
                 try
                 {
-                    if (colorPicker.Color is { } finalColor)
-                    {
-                        DialogCustomColor = Color.FromArgb(255,
-                            (byte)finalColor.RGB_R,
-                            (byte)finalColor.RGB_G,
-                            (byte)finalColor.RGB_B);
-                        _logger.ZLogInformation($"从颜色选择器读取颜色: {DialogCustomColor}");
-                    }
+                    var selectedColor = dialog.GetSelectedColor();
+                    _logger.ZLogDebug($"应用自定义颜色: {selectedColor}");
+                    AddCustomColorToTheme(selectedColor);
                 }
                 catch (Exception ex)
                 {
-                    _logger.ZLogError(ex, $"读取颜色选择器颜色失败");
+                    _logger.ZLogError(ex, $"应用自定义颜色失败");
                 }
-
-                _logger.ZLogInformation($"点击应用按钮，应用颜色: {DialogCustomColor}");
-                AddCustomColorToTheme();
             }, true)
             .WithActionButton("取消", _ => { }, true)
             .TryShow();
@@ -293,10 +220,10 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// 将对话框中选择的颜色添加到主题列表
     /// </summary>
-    private void AddCustomColorToTheme()
+    private void AddCustomColorToTheme(Color selectedColor)
     {
-        var themeName = $"自定义 {DialogCustomColor}";
-        var customTheme = new SukiColorTheme(themeName, DialogCustomColor, DialogCustomColor);
+        var themeName = $"自定义 {selectedColor}";
+        var customTheme = new SukiColorTheme(themeName, selectedColor, selectedColor);
 
         var existingInTheme = _sukiTheme.ColorThemes.FirstOrDefault(ct => ct.Equals(customTheme) || ct.DisplayName == themeName);
         if (existingInTheme != null)
@@ -314,7 +241,7 @@ public partial class SettingsViewModel : ViewModelBase
 
             _sukiTheme.ChangeColorTheme(existingInTheme);
             SelectedColorTheme = existingInTheme;
-            _logger.ZLogInformation($"已存在主题，直接切换: {existingInTheme.DisplayName}");
+            _logger.ZLogDebug($"已存在主题，直接切换: {existingInTheme.DisplayName}");
             _ = SaveSettingsAsync();
             return;
         }
@@ -326,7 +253,7 @@ public partial class SettingsViewModel : ViewModelBase
         _sukiTheme.ChangeColorTheme(customTheme);
         SelectedColorTheme = customTheme;
 
-        _logger.ZLogInformation($"添加并应用自定义颜色: {DialogCustomColor}");
+        _logger.ZLogDebug($"添加并应用自定义颜色: {selectedColor}");
         _ = SaveSettingsAsync();
     }
 
@@ -341,7 +268,7 @@ public partial class SettingsViewModel : ViewModelBase
         // 检查是否是自定义主题
         if (!CustomColorThemes.Contains(colorTheme))
         {
-            _logger.ZLogInformation($"无法删除系统自带主题: {colorTheme.DisplayName}");
+            _logger.ZLogDebug($"无法删除系统自带主题: {colorTheme.DisplayName}");
             return;
         }
 
@@ -358,7 +285,7 @@ public partial class SettingsViewModel : ViewModelBase
         CustomColorThemes.Remove(colorTheme);
         AvailableColors.Remove(colorTheme);
 
-        _logger.ZLogInformation($"已删除自定义颜色主题: {colorTheme.DisplayName}");
+        _logger.ZLogDebug($"已删除自定义颜色主题: {colorTheme.DisplayName}");
 
         _ = SaveSettingsAsync();
     }
@@ -371,7 +298,7 @@ public partial class SettingsViewModel : ViewModelBase
         if (value != null)
         {
             _sukiTheme.ChangeColorTheme(value);
-            _logger.ZLogInformation($"主题颜色已切换到: {value.DisplayName}");
+            _logger.ZLogDebug($"主题颜色已切换到: {value.DisplayName}");
 
             if (!_isInitializing)
             {
@@ -428,7 +355,7 @@ public partial class SettingsViewModel : ViewModelBase
                 }
             }
 
-            _logger.ZLogInformation($"成功恢复主题设置");
+            _logger.ZLogDebug($"成功恢复主题设置");
         }
         catch (Exception ex)
         {
@@ -460,7 +387,7 @@ public partial class SettingsViewModel : ViewModelBase
             };
 
             await _themeConfigService.SaveSettingsAsync(settings);
-            _logger.ZLogInformation($"成功保存主题设置");
+            _logger.ZLogDebug($"成功保存主题设置");
         }
         catch (Exception ex)
         {

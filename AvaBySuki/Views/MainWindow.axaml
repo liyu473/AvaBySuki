@@ -13,9 +13,12 @@
     d:DesignWidth="800"
     x:DataType="vm:MainWindowViewModel"
     BackgroundStyle="Bubble"
-    Icon="/Assets/avalonia-logo.ico"
     WindowState="Maximized"
     mc:Ignorable="d">
+
+    <sukiUi:SukiWindow.LogoContent>
+        <Image Width="20" Height="20" Source="avares://AvaBySuki/Assets/avalonia-logo.ico" />
+    </sukiUi:SukiWindow.LogoContent>
 
     <sukiUi:SukiWindow.Hosts>
         <sukiUi:SukiDialogHost x:Name="DialogHost" />
