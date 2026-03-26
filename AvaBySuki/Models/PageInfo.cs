@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using System;
 
 namespace AvaBySuki.Models;
 
@@ -18,7 +19,7 @@ public class PageInfo
     public string Icon { get; set; } = "mdi-home";
 
     /// <summary>
-    /// 页面内容
+    /// 页面类型
     /// </summary>
-    public UserControl? PageContent { get; set; }
+    public Type? PageType { get; set; }
 }

@@ -29,6 +29,9 @@ internal sealed class Program
             var configuration = BuildConfiguration();
             var host = BuildHost(args, configuration);
 
+            // 启动 Host 服务
+            host.Start();
+
             App.Services = host.Services;
 
             BuildAvaloniaApp()

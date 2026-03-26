@@ -34,7 +34,7 @@
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-        <PackageReference Include="LyuExtensions" Version="1.1.8" />
+        <PackageReference Include="LyuExtensions" Version="1.1.9" />
         <PackageReference Include="LyuLogExtension" Version="1.7.2" />
         <PackageReference Include="Material.Icons.Avalonia" Version="3.0.1-nightly.0.4" />
         <PackageReference Include="PixiEditor.ColorPicker.AvaloniaUI" Version="1.0.10" />

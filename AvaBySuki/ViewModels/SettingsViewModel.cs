@@ -1,7 +1,5 @@
 using AvaBySuki.Models;
 using AvaBySuki.Services;
-using Avalonia.Controls;
-using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -79,14 +77,10 @@ public partial class SettingsViewModel : ViewModelBase
         _sukiTheme = SukiTheme.GetInstance();
 
         // 初始化可用颜色列表（系统自带）
-        AvailableColors = new ObservableCollection<SukiColorTheme>(_sukiTheme.ColorThemes);
+        AvailableColors = [.. _sukiTheme.ColorThemes];
 
-        // 设置主题
         CurrentTheme = _sukiTheme.ActiveBaseTheme;
         SelectedColorTheme = _sukiTheme.ActiveColorTheme;
-
-        // 加载保存的设置
-        _ = LoadSettingsAsync();
     }
 
     /// <summary>
@@ -310,7 +304,7 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     /// 加载保存的主题设置
     /// </summary>
-    private async Task LoadSettingsAsync()
+    public async Task LoadSettingsAsync()
     {
         try
         {

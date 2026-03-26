@@ -1,7 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
-using AvaBySuki.Models;
+﻿using AvaBySuki.Models;
 using AvaBySuki.Views;
+using Avalonia.Collections;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LyuExtensions.Aspects;
 
 namespace AvaBySuki.ViewModels;
@@ -13,7 +13,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// 页面集合
     /// </summary>
     [ObservableProperty]
-    public partial ObservableCollection<PageInfo> Pages { get; set; } = [];
+    public partial AvaloniaList<PageInfo> Pages { get; set; } = [];
 
     /// <summary>
     /// 当前选中的页面
@@ -35,35 +35,35 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             DisplayName = "首页",
             Icon = "mdi-home",
-            PageContent = App.GetRequiredService<HomePage>()
+            PageType = typeof(HomePage)
         });
 
         Pages.Add(new PageInfo
         {
             DisplayName = "设置",
             Icon = "mdi-cog",
-            PageContent = App.GetRequiredService<SettingsPage>()
+            PageType = typeof(SettingsPage)
         });
 
         Pages.Add(new PageInfo
         {
             DisplayName = "关于",
             Icon = "mdi-information",
-            PageContent = App.GetRequiredService<AboutPage>()
+            PageType = typeof(AboutPage)
         });
-        
+
         Pages.Add(new PageInfo
         {
             DisplayName = "网页",
             Icon = "mdi-web",
-            PageContent = App.GetRequiredService<WebViewPage>()
+            PageType = typeof(WebViewPage)
         });
-        
+
         Pages.Add(new PageInfo
         {
             DisplayName = "图片颜色",
             Icon = "mdi-palette",
-            PageContent = App.GetRequiredService<ImagePalettePage>()
+            PageType = typeof(ImagePalettePage)
         });
 
         ActivePage = Pages[0];

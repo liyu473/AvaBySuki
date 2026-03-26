@@ -1,11 +1,14 @@
+using System;
+using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
+using AvaBySuki.ViewModels;
 using AvaBySuki.Views;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 using ZLogger;
 
 namespace AvaBySuki;
@@ -23,7 +26,8 @@ public partial class App : Application
     /// <typeparam name="T">服务类型</typeparam>
     /// <returns>服务实例</returns>
     /// <exception cref="InvalidOperationException">服务未注册或服务提供者未初始化</exception>
-    public static T GetService<T>() where T : class
+    public static T GetService<T>()
+        where T : class
     {
         if (Services == null)
         {
@@ -39,7 +43,8 @@ public partial class App : Application
     /// </summary>
     /// <typeparam name="T">服务类型</typeparam>
     /// <returns>服务实例，如果未找到则返回 null</returns>
-    public static T? TryGetService<T>() where T : class
+    public static T? TryGetService<T>()
+        where T : class
     {
         return Services?.GetService<T>();
     }
@@ -50,7 +55,8 @@ public partial class App : Application
     /// <typeparam name="T">服务类型</typeparam>
     /// <returns>服务实例</returns>
     /// <exception cref="InvalidOperationException">服务未注册或服务提供者未初始化</exception>
-    public static T GetRequiredService<T>() where T : class
+    public static T GetRequiredService<T>()
+        where T : class
     {
         if (Services == null)
         {
@@ -65,21 +71,21 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         try
         {
-            // 设置全局异常处理
-            SetupExceptionHandlers();
-
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                _ = GetRequiredService<SettingsViewModel>().LoadSettingsAsync();
                 desktop.MainWindow = GetRequiredService<MainWindow>();
-
                 desktop.MainWindow.Closed += OnMainWindowClosed;
             }
 
             base.OnFrameworkInitializationCompleted();
+
+            // 设置全局异常处理（必须在 base.OnFrameworkInitializationCompleted() 之后）
+            SetupExceptionHandlers();
         }
         catch (Exception ex)
         {
@@ -115,15 +121,22 @@ public partial class App : Application
             e.SetObserved(); // 防止程序崩溃
         };
 
-        //处理 Avalonia 绑定错误
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime)
+        //处理 UI 线程异常
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // ...
+            // 捕获 UI 线程未处理的异常
+            AppDomain.CurrentDomain.FirstChanceException += (sender, e) =>
+            {
+                // 只记录 UI 线程的异常
+                if (System.Threading.SynchronizationContext.Current != null)
+                {
+                    logger?.ZLogError(e.Exception, $"发生 UI 线程异常（FirstChance）");
+                }
+            };
         }
 
         logger?.ZLogInformation($"全局异常处理已配置");
     }
-
 
     /// <summary>
     /// 主窗口关闭事件处理

@@ -6,6 +6,7 @@
     xmlns:i="https://github.com/projektanker/icons.avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:AvaBySuki.Models"
+    xmlns:converters="using:AvaBySuki.Converters"
     xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:vm="using:AvaBySuki.ViewModels"
     Title="AvaBySuki"
@@ -62,10 +63,10 @@
         ItemsSource="{Binding Pages}"
         SelectedItem="{Binding ActivePage}">
 
-        <!--  定义如何渲染 PageInfo 的 PageContent  -->
+        <!--  定义如何渲染 PageInfo 的 PageType  -->
         <sukiUi:SukiSideMenu.DataTemplates>
             <DataTemplate DataType="models:PageInfo">
-                <ContentControl Content="{Binding PageContent}">
+                <ContentControl Content="{Binding PageType, Converter={x:Static converters:PageTypeToContentConverter.Instance}}">
                     <!--  内容过渡动画  -->
                     <ContentControl.Transitions>
                         <Transitions>
@@ -123,8 +124,7 @@
             <DataTemplate>
                 <sukiUi:SukiSideMenuItem
                     Classes="Compact"
-                    Header="{Binding DisplayName}"
-                    PageContent="{Binding PageContent}">
+                    Header="{Binding DisplayName}">
                     <sukiUi:SukiSideMenuItem.Icon>
                         <i:Icon FontSize="16" Value="{Binding Icon}" />
                     </sukiUi:SukiSideMenuItem.Icon>

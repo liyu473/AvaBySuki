@@ -211,6 +211,7 @@
                         PasswordChar="*"
                         Text="{Binding Password}"
                         Watermark="*******" />
+                    <TextBox/>
                 </StackPanel>
             </sukiUi:GlassCard>
         </StackPanel>
